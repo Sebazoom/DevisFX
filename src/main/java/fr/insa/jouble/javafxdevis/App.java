@@ -19,6 +19,7 @@ public class App extends Application {
         var label = new Label("Bonjour bienvenue dans notre simulateur.");
         var scene = new Scene(new StackPane(label), 640, 480);
         stage.setScene(scene);
+        stage.setTitle("projet Devis batiment");
         stage.show();
     }
 
