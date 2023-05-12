@@ -68,8 +68,10 @@ public class App extends Application {
     }
     
     private void createThirdScene() {
-        Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
+         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
     drawingPane.setPrefSize(640, 480);
+
+    final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
 
     drawingPane.setOnMouseClicked(event -> {
         double x = event.getX(); // Coordonnée X du clic de la souris
@@ -79,20 +81,16 @@ public class App extends Application {
 
         drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
 
-        if (drawingPane.getChildren().size() >= 2) {
-            // S'il y a déjà au moins 2 points, on relie les deux derniers points par une ligne
-            Node point1 = drawingPane.getChildren().get(drawingPane.getChildren().size() - 2);
-            Node point2 = drawingPane.getChildren().get(drawingPane.getChildren().size() - 1);
-
-            Line line = new Line();
-            line.setStartX(point1.getTranslateX());
-            line.setStartY(point1.getTranslateY());
-            line.setEndX(point2.getTranslateX());
-            line.setEndY(point2.getTranslateY());
-            line.setStroke(Color.BLACK);
-
-            drawingPane.getChildren().add(line); // Ajout de la ligne au conteneur
+        if (previousPoint[0] != null) {
+            // S'il y a déjà un point précédent, on calcule la distance entre les deux points
+            double distance = calculateDistance(previousPoint[0], point);
+            Label distanceLabel = new Label("Distance: " + distance + " pixels");
+            distanceLabel.setLayoutX((previousPoint[0].getCenterX() + point.getCenterX()) / 2);
+            distanceLabel.setLayoutY((previousPoint[0].getCenterY() + point.getCenterY()) / 2);
+            drawingPane.getChildren().add(distanceLabel);
         }
+
+        previousPoint[0] = point; // Met à jour le point précédent
     });
 
     Button button = new Button("Terminer");
@@ -117,9 +115,14 @@ public class App extends Application {
     mainRoot.setAlignment(Pos.CENTER);
     mainRoot.getChildren().addAll(drawingPane, button);
 
-    thirdScene = new Scene(mainRoot, 640, 480);}
+    thirdScene = new Scene(mainRoot, 640, 480);
+}
 
     public static void main(String[] args) {
         launch();
+    }
+
+    private double calculateDistance(Circle circle, Circle point) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
