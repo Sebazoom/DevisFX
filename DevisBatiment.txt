@@ -1,0 +1,4 @@
+Coin{idCoin=1, cx=222.4, cy=140.0}
+Coin{idCoin=2, cx=499.2, cy=115.2}
+Coin{idCoin=3, cx=460.8, cy=234.4}
+Coin{idCoin=4, cx=304.0, cy=291.2}
