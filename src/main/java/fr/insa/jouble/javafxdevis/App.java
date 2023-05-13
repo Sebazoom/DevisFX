@@ -42,9 +42,9 @@ public class App extends Application {
 
     private void createWelcomeScene() {
         Label welcomeLabel = new Label("Bienvenue dans notre simulateur.");
-        welcomeLabel.setStyle("-fx-font-size: 20px;");
+        welcomeLabel.setStyle("-fx-font-size: 25px;");
         Label Nom1 = new Label("JOUBLE LAGADEC KONE-KABAMBA");
-        
+       
         Button arrowButton = new Button(">>");
         arrowButton.setOnAction(event -> primaryStage.setScene(mainScene));
 
