@@ -3,6 +3,7 @@ package fr.insa.jouble.javafxdevis;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -30,6 +31,8 @@ public class App extends Application {
     private Scene welcomeScene;
     private Scene mainScene;
     private Scene thirdScene;
+    int idCoin = 1;
+    int idMur = 1;
 
     @Override
     public void start(Stage stage) {
@@ -37,7 +40,17 @@ public class App extends Application {
 
         createWelcomeScene();
         createMainScene();
-        createThirdScene();
+        try {
+            createThirdScene();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (NoSuchFieldException ex) {
+            ex.printStackTrace();
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
 
         primaryStage.setScene(welcomeScene);
         primaryStage.setTitle("Projet Devis Batiment");
@@ -71,89 +84,120 @@ public class App extends Application {
         mainScene = new Scene(mainRoot, 640, 480);
     }
     
-private void createThirdScene() {
-    Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
-    drawingPane.setPrefSize(640, 480);
+    
+    private void createThirdScene() throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
+        drawingPane.setPrefSize(640, 480);
+        
 
-    final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
 
-    VBox infoContainer = new VBox(10); // Conteneur pour afficher les informations
-    infoContainer.setAlignment(Pos.TOP_RIGHT);
-    infoContainer.setPadding(new Insets(10));
-    infoContainer.setMaxWidth(200);
+        ArrayList<Coin> ListeCoin = new ArrayList<>();
+        ArrayList<Mur> ListeMur = new ArrayList<>();
 
-    drawingPane.setOnMouseClicked(event -> {
-        double x = event.getX(); // Coordonnée X du clic de la souris
-        double y = event.getY(); // Coordonnée Y du clic de la souris
+        final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
 
-        Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
+        VBox infoContainer = new VBox(10); // Conteneur pour afficher les informations
+        infoContainer.setAlignment(Pos.TOP_RIGHT);
+        infoContainer.setPadding(new Insets(10));
+        infoContainer.setMaxWidth(200);
 
-        drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
+        drawingPane.setOnMouseClicked(event -> {
+            double x = event.getX(); // Coordonnée X du clic de la souris
+            double y = event.getY(); // Coordonnée Y du clic de la souris
 
-        if (previousPoint[0] != null) {
-            // S'il y a déjà un point précédent, on calcule la distance entre les deux points
-            double distance = calculateDistance(previousPoint[0].getCenterX(), previousPoint[0].getCenterY(), point.getCenterX(), point.getCenterY());
+            Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
 
-            // Affichage de la distance
-            Label distanceLabel = new Label("Distance: " + distance + " pixels");
-            distanceLabel.setStyle("-fx-text-fill : red;");
-            // Affichage de la question
-            Label heightLabel = new Label("Quelle est la hauteur du mur?");
+            drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
+            Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
+            ListeCoin.add(coin);
+            idCoin++;
+            
+            if (idCoin >= 2 && ListeCoin.size() >= idCoin) {
+                Coin debut = ListeCoin.get(idCoin-2);
+                Coin fin = ListeCoin.get(idCoin-1);
+                Mur mur = new Mur(idMur, debut, fin);
+                ListeMur.add(mur);
+                idMur++;
+            }
+            
 
-            // Zone de réponse
-            TextField heightInput = new TextField();
-            heightInput.setOnKeyPressed(event1 -> {
-                if (event1.getCode() == KeyCode.ENTER) {
-                    String heightText = heightInput.getText();
-                    double height = Double.parseDouble(heightText);
+            if (previousPoint[0] != null) {
+                // S'il y a déjà un point précédent, on calcule la distance entre les deux points
+                double distance = calculateDistance(previousPoint[0].getCenterX(), previousPoint[0].getCenterY(), point.getCenterX(), point.getCenterY());
 
-                    // Calcul de l'aire du mur
-                    double area = distance * height;
+                // Affichage de la distance
+                Label distanceLabel = new Label("Distance: " + distance + " pixels");
+                distanceLabel.setStyle("-fx-text-fill : red;");
+                // Affichage de la question
+                Label heightLabel = new Label("Quelle est la hauteur du mur?");
 
-                    // Affichage de l'aire du mur
-                    Label areaLabel = new Label("Aire du mur: " + area + " pixels carrés");
-                    areaLabel.setStyle("-fx-text-fill: green;");
-                    // Ajout des labels au conteneur
-                    infoContainer.getChildren().clear();
-                    infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput, areaLabel);
+                // Zone de réponse
+                TextField heightInput = new TextField();
+                heightInput.setOnKeyPressed(event1 -> {
+                    if (event1.getCode() == KeyCode.ENTER) {
+                        String heightText = heightInput.getText();
+                        double height = Double.parseDouble(heightText);
+
+                        // Calcul de l'aire du mur
+                        double area = distance * height;
+
+                        // Affichage de l'aire du mur
+                        Label areaLabel = new Label("Aire du mur: " + area + " pixels carrés");
+                        areaLabel.setStyle("-fx-text-fill: green;");
+                        // Ajout des labels au conteneur
+                        infoContainer.getChildren().clear();
+                        infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput, areaLabel);
+                    }
+                });
+
+                // Ajout des labels au conteneur
+                infoContainer.getChildren().clear();
+                infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput);
+            }
+
+            previousPoint[0] = point; // Met à jour le point précédent
+        });
+
+        Button button = new Button("Terminer");
+        button.setOnAction(event -> {
+            FileWriter fileWriter = null;
+            BufferedWriter bufferedWriter = null;
+            primaryStage.close();
+            try {
+                fileWriter = new FileWriter("DevisBatiment.txt");
+                bufferedWriter = new BufferedWriter(fileWriter);
+
+                // Ajoute le code pour traiter la liste des points ici
+                for (Coin coin : ListeCoin) {
+                    // Traiter chaque objet Coin de la liste
+                    bufferedWriter.write(coin.toString());
+                    bufferedWriter.newLine();
                 }
-            });
+                
+                System.out.println("Nombre de murs: " + ListeMur.size());
+                bufferedWriter.flush();
+                for (Mur mur : ListeMur) {
+                    // Traiter chaque objet Coin de la liste
+                    bufferedWriter.write(mur.toString());
+                    bufferedWriter.newLine();
+                }
 
-            // Ajout des labels au conteneur
-            infoContainer.getChildren().clear();
-            infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput);
-        }
+                bufferedWriter.flush();
+                bufferedWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
-        previousPoint[0] = point; // Met à jour le point précédent
-    });
+        HBox rootContainer = new HBox(10);
+        rootContainer.getChildren().addAll(drawingPane, infoContainer);
 
-    Button button = new Button("Terminer");
-    button.setOnAction(event -> {
-        FileWriter fileWriter = null;
-        BufferedWriter bufferedWriter = null;
-        try {
-            fileWriter = new FileWriter("DevisBatiment.txt");
-            bufferedWriter = new BufferedWriter(fileWriter);
+        VBox mainRoot = new VBox(10);
+        mainRoot.setAlignment(Pos.CENTER);
+        mainRoot.getChildren().addAll(rootContainer, button);
 
-            // Ajoute le code de la classe ProjetDevisBatiment ici
-            // ...
-
-            bufferedWriter.flush();
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    });
-
-    HBox rootContainer = new HBox(10);
-    rootContainer.getChildren().addAll(drawingPane, infoContainer);
-
-    VBox mainRoot = new VBox(10);
-    mainRoot.setAlignment(Pos.CENTER);
-    mainRoot.getChildren().addAll(rootContainer, button);
-
-    thirdScene = new Scene(mainRoot, 800, 480);
-}
+        thirdScene = new Scene(mainRoot, 800, 480);
+    }
 
 private double calculateDistance(double x1, double y1, double x2, double y2) {
     double deltaX = x2 - x1;
