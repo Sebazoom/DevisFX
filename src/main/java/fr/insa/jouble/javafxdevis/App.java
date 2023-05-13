@@ -118,6 +118,9 @@ public class App extends Application {
                 Coin fin = ListeCoin.get(idCoin-1);
                 Mur mur = new Mur(idMur, debut, fin);
                 ListeMur.add(mur);
+                Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
+                ligne.setStrokeWidth(5); ligne.setStroke(Color.BLUE);;
+                drawingPane.getChildren().add(ligne);
                 idMur++;
             }
             
