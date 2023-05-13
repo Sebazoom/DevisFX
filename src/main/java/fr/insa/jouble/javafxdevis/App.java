@@ -67,8 +67,8 @@ public class App extends Application {
         mainScene = new Scene(mainRoot, 640, 480);
     }
     
-    private void createThirdScene() {
-         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
+private void createThirdScene() {
+    Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
     drawingPane.setPrefSize(640, 480);
 
     final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
@@ -83,7 +83,7 @@ public class App extends Application {
 
         if (previousPoint[0] != null) {
             // S'il y a déjà un point précédent, on calcule la distance entre les deux points
-            double distance = calculateDistance(previousPoint[0], point);
+            double distance = calculateDistance(previousPoint[0].getCenterX(), previousPoint[0].getCenterY(), point.getCenterX(), point.getCenterY());
             Label distanceLabel = new Label("Distance: " + distance + " pixels");
             distanceLabel.setLayoutX((previousPoint[0].getCenterX() + point.getCenterX()) / 2);
             distanceLabel.setLayoutY((previousPoint[0].getCenterY() + point.getCenterY()) / 2);
@@ -118,6 +118,11 @@ public class App extends Application {
     thirdScene = new Scene(mainRoot, 640, 480);
 }
 
+private double calculateDistance(double x1, double y1, double x2, double y2) {
+    double deltaX = x2 - x1;
+    double deltaY = y2 - y1;
+    return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+}
     public static void main(String[] args) {
         launch();
     }
