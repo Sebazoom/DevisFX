@@ -135,6 +135,7 @@ private void createThirdScene() {
 
             // Dessiner le mur
             Line ligne = new Line(coin1.getX(), coin1.getY(), coin2.getX(), coin2.getY());
+            ligne.setStrokeWidth(5);
             drawingPane.getChildren().add(ligne);
 
             // Réinitialiser le premier Coin
