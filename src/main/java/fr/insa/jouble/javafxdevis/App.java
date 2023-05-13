@@ -33,6 +33,7 @@ public class App extends Application {
     private Scene thirdScene;
     int idCoin = 1;
     int idMur = 1;
+    int i = 0;
 
     @Override
     public void start(Stage stage) {
@@ -110,9 +111,9 @@ public class App extends Application {
             drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
             Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
             ListeCoin.add(coin);
-            idCoin++;
             
-            if (idCoin >= 2 && ListeCoin.size() >= idCoin) {
+            
+            if (ListeCoin.size() > 1) {
                 Coin debut = ListeCoin.get(idCoin-2);
                 Coin fin = ListeCoin.get(idCoin-1);
                 Mur mur = new Mur(idMur, debut, fin);
@@ -120,7 +121,7 @@ public class App extends Application {
                 idMur++;
             }
             
-
+            idCoin++;
             if (previousPoint[0] != null) {
                 // S'il y a déjà un point précédent, on calcule la distance entre les deux points
                 double distance = calculateDistance(previousPoint[0].getCenterX(), previousPoint[0].getCenterY(), point.getCenterX(), point.getCenterY());
