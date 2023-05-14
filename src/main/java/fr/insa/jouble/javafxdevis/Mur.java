@@ -24,7 +24,7 @@ public class Mur {
     }
     
     void afficher()
-    {System.out.println("==== Mur =====");
+    {System.out.println("===== Mur =====");
         this.debut.afficher();
         this.fin.afficher();    
     }
@@ -34,14 +34,8 @@ public class Mur {
         return(Math.sqrt((this.fin.cx-this.debut.cx)*(this.fin.cx-this.debut.cx) + (this.fin.cy-this.debut.cy)*(this.fin.cy-this.debut.cy)));
     }
     
-    double surface()
+    double surface(double hsp, int nbportes, int nbfenetres)
     {
-        System.out.println("\nEntrez la Hauteur du mur (hauteur sous-plafond)");
-        double hsp=Lire.d();
-        System.out.println("\nEntrez le nombre de portes situees sur le mur");
-        int nbportes = Lire.i();
-        System.out.println("\nEntrez le nombre de fenetres situees sur le mur");
-        int nbfenetres = Lire.i();
         return(this.longueur()*hsp-surfaceFenetre*nbfenetres-surfacePorte*nbportes);
     }
     
