@@ -133,10 +133,32 @@ public class App extends Application {
         infoContainer.setPadding(new Insets(10));
         infoContainer.setMaxWidth(200);
 
+        final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
+
         drawingPane.setOnMouseClicked(event -> {
             double x = event.getX(); // Coordonnée X du clic de la souris
             double y = event.getY(); // Coordonnée Y du clic de la souris
-
+           /* Circle select = null;
+            
+            for (Node point : drawingPane.getChildren()) {
+                if (point instanceof Circle) {
+                    double dist = calculateDistance(point.getLayoutX(), point.getLayoutY(), x, y);
+                    if (dist <= rayon) {
+                        // un point existe déjà dans le rayon spécifié
+                        select = (Circle) point;
+                        
+                        break;
+                    }
+                }
+            }
+            
+            if (select != null) {
+                // appliquer un style de sélection au point sélectionné
+                select.setFill(Color.BLUE);
+                select.setStroke(Color.RED);
+                select.setStrokeWidth(2.0);
+            }
+            */
             Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
 
             drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
