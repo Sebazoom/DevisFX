@@ -32,60 +32,88 @@ public class ProjetDevisBatiment {
         ArrayList<Coin> ListeCoin = new ArrayList<>();
         ArrayList<Mur> ListeMur = new ArrayList<>();
        
-       
+        double[] prixpieces = new double[250];
+        double[] prixmurs = new double[250];
+        int nbrpieces,comptpieces, nbrappart, comptappart, nbrniv, comptniv;
+        int i = 0; 
+        double prixtotalpiece = 0, prixtotalappart = 0, prixtotalniv = 0, prixtotal = 0;
         
-        int k = 1, nbrpieces;
+        
+        // ON DEMANDE LE NBR DE NIVEAUX
         do {
-        System.out.println("Combien y a-t-il de pièces dans l'appartement n°"+k);
-        nbrpieces = Lire.i();
-        } while (nbrpieces<1);
-        
-        for(k=1;k<=nbrpieces;k++) {
-               
-            // Boucle qui crée les coins et les ajoute à la liste
-            for (int j=1; j<=4; j++){
-                Coin c = DemandeCoin(idCoin);
-                ListeCoin.add(c);  
-            } 
-            // Boucle qui écrit les coins dans le fichier txt
-            for (Coin c : ListeCoin) {
-                bufferedWriter.write(c.idCoin + ";" + c.cx + ";" + c.cy + ";");
-                bufferedWriter.newLine(); // Écrit une nouvelle ligne dans le fichier
-            }
-            // On vide le tampon et on écrit définitivement sur le fichier txt
+            System.out.println("Combien y a-t-il de niveaux ?");
+            nbrniv = Lire.i();
+            } while (nbrniv<1);
+        // POUR CHAQUE NIVEAU
+        for(comptniv=1;comptniv<=nbrniv;comptniv++) {
+            // ON DEMANDE LE NBR D'APPARTS
+            do {
+                System.out.println("Combien y a-t-il d'appartements ?");
+                nbrappart = Lire.i();
+                } while (nbrappart<1);
+            // POUR CHAQUE APPARTEMENT 
+            for(comptappart = 1;comptappart<=nbrappart; comptappart++){
+                // ON DEMANDE LE NBR DE PIECES
+                do {
+                System.out.println("Combien y a-t-il de pièces dans l'appartement n°"+comptappart);
+                nbrpieces = Lire.i();
+                } while (nbrpieces<1);
+                // POUR CHAQUE PIECE
+                for(comptpieces=1;comptpieces<=nbrpieces;comptpieces++) {
 
-            bufferedWriter.newLine();
+                    // Boucle qui crée les coins et les ajoute à la liste
+                    for (int j=1; j<=4; j++){
+                        Coin c = DemandeCoin(idCoin);
+                        ListeCoin.add(c);  
+                    } 
+                    // Boucle qui écrit les coins dans le fichier txt
+                    for (Coin c : ListeCoin) {
+                        bufferedWriter.write(c.idCoin + ";" + c.cx + ";" + c.cy + ";");
+                        bufferedWriter.newLine(); // Écrit une nouvelle ligne dans le fichier
+                    }
+                    // On vide le tampon et on écrit définitivement sur le fichier txt
 
-            double[] prixmurs = new double[250];
-            int i = 0; 
-            double prixtotal;
-            for (int j=1; j<=4; j++) {
-                Mur m = DemandeMur(idMur, ListeCoin);
-                double surface = m.surface();
-                RevetementDispo(1,0,0);
-                System.out.println("Quel revêtement voulez-vous ?");
-                int idRevetement = Lire.i();
-                double prix = LectureRevetement(idRevetement);
-                prixmurs[i] = surface*prix;
-                ListeMur.add(m);
-                i++;
-            }
+                    bufferedWriter.newLine();
 
-            for (Mur m : ListeMur) {
-                bufferedWriter.write(m.idMur + ";" + m.debut.idCoin + ";" + m.fin.idCoin + ";");
-                bufferedWriter.newLine(); // Écrit une nouvelle ligne dans le fichier
-            }
+                    // ON CREE LES MURS DE LA PIECE
+                    /*
+                    for (int j=1; j<=4; j++) {
+                        Mur m = DemandeMur(idMur, ListeCoin);
+                        double surface = m.surface();
+                        RevetementDispo(1,0,0);
+                        System.out.println("Quel revêtement voulez-vous ?");
+                        int idRevetement = Lire.i();
+                        double prix = LectureRevetement(idRevetement);
+                        prixmurs[i] = surface*prix;
+                        ListeMur.add(m);
+                        i++;
+                    }
+                    */
+                    // ON CALCULE LE PRIX TOTAL DE LA PIECE
+                    for (int j=0; j<=3; j++) {
+                        prixtotalpiece = prixtotalpiece+prixmurs[j];
+                    }
 
-            Piece p = DemandePiece(ListeMur);
+                    // ON INSCRIT LES MURS DANS LE FICHIER TXT
+                    for (Mur m : ListeMur) {
+                        bufferedWriter.write(m.idMur + ";" + m.debut.idCoin + ";" + m.fin.idCoin + ";");
+                        bufferedWriter.newLine(); // Écrit une nouvelle ligne dans le fichier
+                    }
+                    // ON ENREGISTRE LE PRIX DE LA PIECE N°I EN I-EME POSITION DU TABLEAU POUR CALCULER LE PRIX DE L'APPARTEMENT
+                    prixpieces[comptpieces-1] = prixtotalpiece;
+                    Piece p = DemandePiece(ListeMur);
 
 
-            // Boucle qui écrit les murs dans le fichier txt
+                    // Boucle qui écrit les murs dans le fichier txt
 
-            bufferedWriter.write(p.idPiece + ";" + p.listesMur);
-            bufferedWriter.newLine();
-        
+                    bufferedWriter.write(p.idPiece + ";" + p.listesMur);
+                    bufferedWriter.newLine();
+
+                }
+            }  
         }
-            
+        
+        // ON VIDE LE TAMPON ET ON ECRIT DEFINITIVEMENT SUR LE FICHIER TXT
         bufferedWriter.flush();
         bufferedWriter.close();
       
@@ -145,6 +173,7 @@ public class ProjetDevisBatiment {
     public static Piece DemandePiece(ArrayList ListeMur) {
         Piece p;
         p = new Piece(idPiece, idSol, idPlafond, ListeMur);
+        idPiece++;
         return p;
     }
     
@@ -167,35 +196,33 @@ public class ProjetDevisBatiment {
     
     
 
-    public static void RevetementDispo (int m, int s, int p){//m=1 si mur, s=1 si sol, p=1 si plafond
-        
-        System.out.println("Voici les revetements disponibles pour cette surface :");
-        try
-        {
+    public static String RevetementDispo(int m, int s, int p) { // m=1 si mur, s=1 si sol, p=1 si plafond
+        StringBuilder sb = new StringBuilder();
+        sb.append("Voici les revêtements disponibles pour cette surface :\n");
+        try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("C:\\Users\\sjoub\\Documents\\NetBeansProjects\\DevisBatiment\\src\\main\\java\\fr\\insa\\jouble\\projetdevisbatiment\\CatalogueRevetement.txt"));
             String ligne = bufferedReader.readLine();
-            
+
             while (ligne != null) {
                 String[] morceaux = ligne.split(";");
                 ligne = bufferedReader.readLine();
                 if (morceaux[2].equals(String.valueOf(m)) && (morceaux[2].equals("1"))) {
-                    System.out.println(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5]);
+                    sb.append(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5] + "\n");
                 }
                 if (morceaux[3].equals(String.valueOf(s))&& (morceaux[3].equals("1"))) {
-                   System.out.println(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5]);
+                    sb.append(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5] + "\n");
                 }
                 if (morceaux[4].equals(String.valueOf(p))&& (morceaux[4].equals("1"))) {
-                    System.out.println(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5]);
+                    sb.append(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5] + "\n");
                 }
-                
             }
-            
-        } 
-       
-        catch(FileNotFoundException err){
-               System.out.println( "Erreur : le fichier n’existe pas!\n "+err);}
-        catch (IOException err){
-            System.out.println(" Erreur :\n "+err);}
+
+        } catch (FileNotFoundException err) {
+            sb.append("Erreur : le fichier n’existe pas!\n " + err);
+        } catch (IOException err) {
+            sb.append("Erreur :\n " + err);
+        }
+        return sb.toString();
     }
 
 
