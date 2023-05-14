@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
@@ -31,9 +32,10 @@ public class App extends Application {
     private Scene welcomeScene;
     private Scene mainScene;
     private Scene thirdScene;
+
     int idCoin = 1;
     int idMur = 1;
-    int i = 0;
+    int nbrfenetre = 0, nbrporte = 0;
 
     @Override
     public void start(Stage stage) {
@@ -86,11 +88,40 @@ public class App extends Application {
     }
     
     
+    
+    private Scene createSceneRevetement(int mur, int sol, int plafond) {
+    // Nombre de cases à cocher
+        int i = 5;
+        ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
+        // Création des cases à cocher
+        CheckBox[] checkBoxes = new CheckBox[i];
+        for (int j = 0; j < i; j++) {
+            checkBoxes[j] = new CheckBox("Option " + (j+1));
+        }
+
+        // Création du conteneur
+        VBox root = new VBox();
+        root.getChildren().addAll(checkBoxes);
+        root.setAlignment(Pos.CENTER);
+
+        // Création de la scène
+        Scene scene = new Scene(root, 300, 250);
+        
+        return scene;
+    }
+    
+    
+    
     private void createThirdScene() throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
         drawingPane.setPrefSize(640, 480);
         
-
+        // BOUTON POUR OUVRIR LA SCENE CREATESCENEREVETEMENT
+        Button buttonRevetement = new Button("Choisir un revetement pour un mur");
+        buttonRevetement.setOnAction(event -> {
+            Scene sceneRevetement = createSceneRevetement(1,0,0);
+            primaryStage.setScene(sceneRevetement);
+        });
 
         ArrayList<Coin> ListeCoin = new ArrayList<>();
         ArrayList<Mur> ListeMur = new ArrayList<>();
@@ -119,32 +150,51 @@ public class App extends Application {
                 Mur mur = new Mur(idMur, debut, fin);
                 ListeMur.add(mur);
                 Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
-                ligne.setStrokeWidth(5); ligne.setStroke(Color.BLUE);;
+                ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);;
                 drawingPane.getChildren().add(ligne);
                 idMur++;
             }
             
             idCoin++;
-            if (previousPoint[0] != null) {
+            if (!ListeMur.isEmpty()) {
                 // S'il y a déjà un point précédent, on calcule la distance entre les deux points
-                double distance = calculateDistance(previousPoint[0].getCenterX(), previousPoint[0].getCenterY(), point.getCenterX(), point.getCenterY());
+                double distance = ListeMur.get(idMur-2).longueur();
+                
 
                 // Affichage de la distance
                 Label distanceLabel = new Label("Distance: " + distance + " pixels");
                 distanceLabel.setStyle("-fx-text-fill : red;");
                 // Affichage de la question
-                Label heightLabel = new Label("Quelle est la hauteur du mur?");
+                Label heightLabel = new Label("Quelle est la hauteur du mur ?");
+                Label porteLabel = new Label("Combien y a-t-il de portes dans le mur ?");
+                Label fenetreLabel = new Label("Combien y a-t-il de fenetres dans le mur ?");
 
                 // Zone de réponse
                 TextField heightInput = new TextField();
+                TextField porteInput = new TextField();
+                TextField fenetreInput = new TextField();
+                
+                porteInput.setOnKeyPressed(event2 -> {
+                    if (event2.getCode() == KeyCode.ENTER) {
+                        String porteText = porteInput.getText();
+                        nbrporte = Integer.parseInt(porteText);
+                    }
+                });
+                
+                fenetreInput.setOnKeyPressed(event3 -> {
+                    if (event3.getCode() == KeyCode.ENTER) {
+                        String fenetreText = fenetreInput.getText();
+                        nbrfenetre = Integer.parseInt(fenetreText);
+                        
+                    }
+                });
+                
                 heightInput.setOnKeyPressed(event1 -> {
                     if (event1.getCode() == KeyCode.ENTER) {
                         String heightText = heightInput.getText();
                         double height = Double.parseDouble(heightText);
-
                         // Calcul de l'aire du mur
-                        double area = distance * height;
-
+                        double area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
                         // Affichage de l'aire du mur
                         Label areaLabel = new Label("Aire du mur: " + area + " pixels carrés");
                         areaLabel.setStyle("-fx-text-fill: green;");
@@ -156,7 +206,7 @@ public class App extends Application {
 
                 // Ajout des labels au conteneur
                 infoContainer.getChildren().clear();
-                infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput);
+                infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput, porteLabel, porteInput, fenetreLabel, fenetreInput, buttonRevetement);
             }
 
             previousPoint[0] = point; // Met à jour le point précédent
