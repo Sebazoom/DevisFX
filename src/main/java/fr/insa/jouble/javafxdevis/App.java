@@ -126,32 +126,36 @@ public class App extends Application {
         ArrayList<Coin> ListeCoin = new ArrayList<>();
         ArrayList<Mur> ListeMur = new ArrayList<>();
 
-        final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
+        //final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
 
         VBox infoContainer = new VBox(10); // Conteneur pour afficher les informations
         infoContainer.setAlignment(Pos.TOP_RIGHT);
         infoContainer.setPadding(new Insets(10));
         infoContainer.setMaxWidth(200);
 
-        final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
+        final double rayon = 30.0;  // rayon de la zone de recherche autour du clic de souris
 
         drawingPane.setOnMouseClicked(event -> {
             double x = event.getX(); // Coordonnée X du clic de la souris
             double y = event.getY(); // Coordonnée Y du clic de la souris
-           /* Circle select = null;
-            
-            for (Node point : drawingPane.getChildren()) {
-                if (point instanceof Circle) {
-                    double dist = calculateDistance(point.getLayoutX(), point.getLayoutY(), x, y);
-                    if (dist <= rayon) {
-                        // un point existe déjà dans le rayon spécifié
-                        //select = (Circle) point;
-                        select = ListeCoin.get(idCoin-2);
-                        break;
-                    }
+            boolean r = false;
+            for (Coin test : ListeCoin) {
+                double dist = calculateDistance(test.getX(), test.getY(), x, y);
+                if (dist <= rayon) {
+                    // un point existe déjà dans le rayon spécifié
+                    Coin debut = ListeCoin.get(idCoin-2);
+                    Coin fin = test;
+                    Mur mur = new Mur(idMur, debut, fin);
+                    ListeMur.add(mur);
+                    Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
+                    ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
+                    drawingPane.getChildren().add(ligne);
+                    idMur++;
+                    r=true;
+                    break;
                 }
             }
-            
+            /*
             if (select != null) {
                 // appliquer un style de sélection au point sélectionné
                 select.setFill(Color.BLUE);
@@ -159,25 +163,27 @@ public class App extends Application {
                 select.setStrokeWidth(2.0);
             }
             */
-            Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
+            if(!r){
+                Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
 
-            drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
-            Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
-            ListeCoin.add(coin);
-            
-            
-            if (ListeCoin.size() > 1) {
-                Coin debut = ListeCoin.get(idCoin-2);
-                Coin fin = ListeCoin.get(idCoin-1);
-                Mur mur = new Mur(idMur, debut, fin);
-                ListeMur.add(mur);
-                Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
-                ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);;
-                drawingPane.getChildren().add(ligne);
-                idMur++;
+                drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
+                Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
+                ListeCoin.add(coin);
+
+
+                if (ListeCoin.size() > 1) {
+                    Coin debut = ListeCoin.get(idCoin-2);
+                    Coin fin = ListeCoin.get(idCoin-1);
+                    Mur mur = new Mur(idMur, debut, fin);
+                    ListeMur.add(mur);
+                    Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
+                    ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
+                    drawingPane.getChildren().add(ligne);
+                    idMur++;
+                }
+
+                idCoin++;
             }
-            
-            idCoin++;
             if (!ListeMur.isEmpty()) {
                 // S'il y a déjà un point précédent, on calcule la distance entre les deux points
                 double distance = ListeMur.get(idMur-2).longueur();
@@ -231,7 +237,7 @@ public class App extends Application {
                 infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput, porteLabel, porteInput, fenetreLabel, fenetreInput, buttonRevetement);
             }
 
-            previousPoint[0] = point; // Met à jour le point précédent
+            //previousPoint[0] = point; // Met à jour le point précédent
         });
 
         Button button = new Button("Terminer");
