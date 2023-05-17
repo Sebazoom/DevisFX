@@ -145,8 +145,8 @@ public class App extends Application {
                     double dist = calculateDistance(point.getLayoutX(), point.getLayoutY(), x, y);
                     if (dist <= rayon) {
                         // un point existe déjà dans le rayon spécifié
-                        select = (Circle) point;
-                        
+                        //select = (Circle) point;
+                        select = ListeCoin.get(idCoin-2);
                         break;
                     }
                 }
