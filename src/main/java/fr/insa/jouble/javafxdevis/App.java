@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -14,11 +16,13 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -32,10 +36,13 @@ public class App extends Application {
     private Scene welcomeScene;
     private Scene mainScene;
     private Scene thirdScene;
-
+    String ligne;
+    double area;
     int idCoin = 1;
     int idMur = 1;
     int nbrfenetre = 0, nbrporte = 0;
+    String[] morceauxSplit = new String[6];
+    double prix = -1, prixsurface;
 
     @Override
     public void start(Stage stage) {
@@ -89,27 +96,54 @@ public class App extends Application {
     
     
     
-    private Scene createSceneRevetement(int mur, int sol, int plafond) {
-    // Nombre de cases à cocher
-        int i = 5;
-        ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
-        // Création des cases à cocher
-        CheckBox[] checkBoxes = new CheckBox[i];
-        for (int j = 0; j < i; j++) {
-            checkBoxes[j] = new CheckBox("Option " + (j+1));
-        }
-
-        // Création du conteneur
-        VBox root = new VBox();
-        root.getChildren().addAll(checkBoxes);
-        root.setAlignment(Pos.CENTER);
-
-        // Création de la scène
-        Scene scene = new Scene(root, 300, 250);
-        
-        return scene;
-    }
+    private Scene createSceneRevetement(int mur, int sol, int plafond, double area) {
+      
+    ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
     
+
+    // Création de la liste des revêtements disponibles
+    ListView<String> listView = new ListView<>();
+    ObservableList<String> items = FXCollections.observableArrayList();
+    for (int j = 0; j <= listeRevetement.size()-1; j++) {
+        ligne = listeRevetement.get(j);
+        morceauxSplit = ligne.split(";");
+        items.add(morceauxSplit[0] + " : " +morceauxSplit[1]+" a "+ morceauxSplit[5]+ " euros");
+    }
+    listView.setItems(items);
+    Label ConsigneLabel = new Label("Indiquez l'indice du revetement choisi.");
+    // Création de la zone d'entrée clavier
+    TextField textField = new TextField();
+    textField.setPrefWidth(200);
+
+    // Création du bouton pour valider la saisie
+    Button button = new Button("Valider");
+    button.setOnAction(event -> {
+        int prixTexte = Integer.parseInt(textField.getText());
+        try {
+            prix = ProjetDevisBatiment.LectureRevetement(prixTexte);
+        } catch (NumberFormatException e) {
+            prix = 0;
+        }
+        prixsurface = prix * area;
+        System.out.println(prix);
+        System.out.println(area);
+        System.out.println(prixsurface);
+    });
+
+    // Création du conteneur VBox pour la liste des revêtements et la zone d'entrée clavier
+    VBox root = new VBox(10); // espacement de 10 pixels
+    root.getChildren().addAll(ConsigneLabel,listView, textField, button);
+    root.setAlignment(Pos.CENTER); // alignement vertical au centre
+
+    // Création du conteneur BorderPane
+    BorderPane borderPane = new BorderPane();
+    borderPane.setCenter(root); // placement du conteneur VBox au centre
+
+    // Création de la scène
+    Scene scene = new Scene(borderPane, 300, 250);
+
+    return scene;
+}
     
     
     public void createThirdScene() throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
@@ -118,7 +152,8 @@ public class App extends Application {
         // BOUTON POUR OUVRIR LA SCENE CREATESCENEREVETEMENT
         Button buttonRevetement = new Button("Choisir un revetement pour un mur");
         buttonRevetement.setOnAction(event -> {
-            Scene sceneRevetement = createSceneRevetement(1,0,0);
+            
+            Scene sceneRevetement = createSceneRevetement(1,0,0, area);
             primaryStage.setScene(sceneRevetement);
         });
 
@@ -201,6 +236,9 @@ public class App extends Application {
                 TextField porteInput = new TextField();
                 TextField fenetreInput = new TextField();
                 
+                infoContainer.getChildren().clear();
+                infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput, porteLabel, porteInput, fenetreLabel, fenetreInput);
+            
                 porteInput.setOnKeyPressed(event2 -> {
                     if (event2.getCode() == KeyCode.ENTER) {
                         String porteText = porteInput.getText();
@@ -221,19 +259,20 @@ public class App extends Application {
                         String heightText = heightInput.getText();
                         double height = Double.parseDouble(heightText);
                         // Calcul de l'aire du mur
-                        double area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
+                        this.area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
                         // Affichage de l'aire du mur
                         Label areaLabel = new Label("Aire du mur: " + area + " pixels carrés");
                         areaLabel.setStyle("-fx-text-fill: green;");
-                        // Ajout des labels au conteneur
+                
                         infoContainer.getChildren().clear();
-                        infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput, areaLabel);
+                        infoContainer.getChildren().addAll(distanceLabel, areaLabel, buttonRevetement);
+                        // Ajout des labels au conteneur
+                       
                     }
                 });
-
+                
                 // Ajout des labels au conteneur
-                infoContainer.getChildren().clear();
-                infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput, porteLabel, porteInput, fenetreLabel, fenetreInput, buttonRevetement);
+                
             }
 
             //previousPoint[0] = point; // Met à jour le point précédent
@@ -255,7 +294,7 @@ public class App extends Application {
                     bufferedWriter.newLine();
                 }
                 
-                System.out.println("Nombre de murs: " + ListeMur.size());
+                
                 bufferedWriter.flush();
                 for (Mur mur : ListeMur) {
                     // Traiter chaque objet Coin de la liste
