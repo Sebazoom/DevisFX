@@ -112,10 +112,9 @@ public class App extends Application {
     
     
     
-    private void createThirdScene() throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public void createThirdScene() throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
         drawingPane.setPrefSize(640, 480);
-        
         // BOUTON POUR OUVRIR LA SCENE CREATESCENEREVETEMENT
         Button buttonRevetement = new Button("Choisir un revetement pour un mur");
         buttonRevetement.setOnAction(event -> {
