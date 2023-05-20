@@ -1,8 +1,8 @@
-Coin{idCoin=1, cx=200.8, cy=80.0}
-Coin{idCoin=2, cx=472.8, cy=96.0}
-Coin{idCoin=3, cx=518.4, cy=308.8}
-Coin{idCoin=4, cx=228.8, cy=296.8}
-Mur{idMur=1, debut=Coin{idCoin=1, cx=200.8, cy=80.0}, fin=Coin{idCoin=2, cx=472.8, cy=96.0}}
-Mur{idMur=2, debut=Coin{idCoin=2, cx=472.8, cy=96.0}, fin=Coin{idCoin=3, cx=518.4, cy=308.8}}
-Mur{idMur=3, debut=Coin{idCoin=3, cx=518.4, cy=308.8}, fin=Coin{idCoin=4, cx=228.8, cy=296.8}}
-Mur{idMur=4, debut=Coin{idCoin=4, cx=228.8, cy=296.8}, fin=Coin{idCoin=1, cx=200.8, cy=80.0}}
+Coin{idCoin=1, cx=208.8, cy=155.2}
+Coin{idCoin=2, cx=585.6, cy=208.8}
+Coin{idCoin=3, cx=333.6, cy=287.2}
+Coin{idCoin=4, cx=162.4, cy=212.0}
+Mur{idMur=1, debut=Coin{idCoin=1, cx=208.8, cy=155.2}, fin=Coin{idCoin=2, cx=585.6, cy=208.8}}
+Mur{idMur=2, debut=Coin{idCoin=2, cx=585.6, cy=208.8}, fin=Coin{idCoin=3, cx=333.6, cy=287.2}}
+Mur{idMur=3, debut=Coin{idCoin=3, cx=333.6, cy=287.2}, fin=Coin{idCoin=4, cx=162.4, cy=212.0}}
+Mur{idMur=4, debut=Coin{idCoin=4, cx=162.4, cy=212.0}, fin=Coin{idCoin=1, cx=208.8, cy=155.2}}

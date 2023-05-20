@@ -218,6 +218,11 @@ public class App extends Application {
 
                 idCoin++;
             }
+            
+            /*if (ListeCoin.size()<=3){
+                faire qlq chose avec sol
+            }*/
+            
             if (!ListeMur.isEmpty()) {
                 // S'il y a déjà un point précédent, on calcule la distance entre les deux points
                 double distance = ListeMur.get(idMur-2).longueur();
