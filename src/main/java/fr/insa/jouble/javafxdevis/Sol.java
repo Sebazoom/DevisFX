@@ -59,8 +59,7 @@ public class Sol {
         return Math.abs(Math.max(largeur1, largeur2)*Math.max(hauteur1,hauteur2));
     }
     public static double AireTri(double x1, double x2, double x3, double y1, double y2, double y3) {
-        double area = 0.5 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
-        area = Math.abs(area);
-        return area;
+        double aire = 0.5 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+        return Math.abs(aire);
     }
 }
