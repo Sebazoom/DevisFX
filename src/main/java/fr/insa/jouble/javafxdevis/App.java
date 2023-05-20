@@ -42,7 +42,9 @@ public class App extends Application {
     int idMur = 1;
     int nbrfenetre = 0, nbrporte = 0;
     String[] morceauxSplit = new String[6];
-    double prix = -1, prixsurface;
+    double prix = -1;
+    ArrayList<Double> prixsurface = new ArrayList<>();
+    
 
     @Override
     public void start(Stage stage) {
@@ -96,7 +98,7 @@ public class App extends Application {
     
     
     
-    private Scene createSceneRevetement(int mur, int sol, int plafond, double area) {
+    private Scene createSceneRevetement(boolean mur, boolean sol, boolean plafond, double area) {
       
     ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
     
@@ -124,10 +126,9 @@ public class App extends Application {
         } catch (NumberFormatException e) {
             prix = 0;
         }
-        prixsurface = prix * area;
-        System.out.println(prix);
-        System.out.println(area);
-        System.out.println(prixsurface);
+         
+        prixsurface.add(prix * area);
+        primaryStage.setScene(thirdScene);
     });
 
     // Création du conteneur VBox pour la liste des revêtements et la zone d'entrée clavier
@@ -140,7 +141,7 @@ public class App extends Application {
     borderPane.setCenter(root); // placement du conteneur VBox au centre
 
     // Création de la scène
-    Scene scene = new Scene(borderPane, 300, 250);
+    Scene scene = new Scene(borderPane, 800, 480);
 
     return scene;
 }
@@ -149,26 +150,42 @@ public class App extends Application {
     public void createThirdScene() throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
         drawingPane.setPrefSize(640, 480);
-        // BOUTON POUR OUVRIR LA SCENE CREATESCENEREVETEMENT
-        Button buttonRevetement = new Button("Choisir un revetement pour un mur");
-        buttonRevetement.setOnAction(event -> {
-            
-            Scene sceneRevetement = createSceneRevetement(1,0,0, area);
-            primaryStage.setScene(sceneRevetement);
-        });
-
+        
         ArrayList<Coin> ListeCoin = new ArrayList<>();
         ArrayList<Mur> ListeMur = new ArrayList<>();
-
-        //final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
-
+        final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
+        
+        
+        VBox toolscontainer = new VBox(10); // Conteneur pour afficher les informations
+        toolscontainer.setAlignment(Pos.TOP_LEFT);
+        toolscontainer.setPadding(new Insets(10));
+        toolscontainer.setMaxWidth(75);
+        
         VBox infoContainer = new VBox(10); // Conteneur pour afficher les informations
         infoContainer.setAlignment(Pos.TOP_RIGHT);
         infoContainer.setPadding(new Insets(10));
         infoContainer.setMaxWidth(200);
 
-        final double rayon = 30.0;  // rayon de la zone de recherche autour du clic de souris
+        
+        // BOUTON POUR OUVRIR LA SCENE CREATESCENEREVETEMENT
+        Button buttonRevetement = new Button("Choisir un revetement pour un mur");
+        buttonRevetement.setOnAction(event -> {
+            Scene sceneRevetement = createSceneRevetement(true,false,false, area);
+            primaryStage.setScene(sceneRevetement);
+        });
+        
+        Button buttonTools = new Button("Coin");
+        buttonTools.setOnAction(event -> {
+            
+        }
+        );
+        
+        
 
+        //final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
+        
+        
+        
         drawingPane.setOnMouseClicked(event -> {
             double x = event.getX(); // Coordonnée X du clic de la souris
             double y = event.getY(); // Coordonnée Y du clic de la souris
