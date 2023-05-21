@@ -118,7 +118,7 @@ public class App extends Application {
     for (int j = 0; j <= listeRevetement.size()-1; j++) {
         ligne = listeRevetement.get(j);
         morceauxSplit = ligne.split(";");
-        items.add(morceauxSplit[0] + " : " +morceauxSplit[1]+" a "+ morceauxSplit[5]+ " euros");
+        items.add(morceauxSplit[0] + " : " +morceauxSplit[1]+" à "+ morceauxSplit[5]+ " euros");
     }
     listView.setItems(items);
     Label ConsigneLabel = new Label("Indiquez l'indice du revetement choisi.");
@@ -246,11 +246,6 @@ public class App extends Application {
 
                 idCoin++;
             }
-            
-            /*if (ListeCoin.size()<=3){
-                faire qlq chose avec sol
-            }*/
-            
             if (!ListeMur.isEmpty()) {
                 // S'il y a déjà un point précédent, on calcule la distance entre les deux points
                 double distance = ListeMur.get(idMur-2).longueur();
