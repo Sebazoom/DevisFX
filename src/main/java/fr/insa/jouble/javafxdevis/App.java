@@ -38,6 +38,7 @@ public class App extends Application {
     private Scene thirdScene;
     String ligne;
     int compt = 0;
+    int firstpoint = 0;
     boolean piecefinie =false;
     double area;
     int idCoin = 1;
@@ -53,11 +54,6 @@ public class App extends Application {
     TextField heightInput = new TextField();
     TextField porteInput = new TextField();
     TextField fenetreInput = new TextField();
-    ArrayList<Coin> ListeCoin = new ArrayList<>();
-    ArrayList<Mur> ListeMur = new ArrayList<>();
-    ArrayList<Sol> ListeSol = new ArrayList<>();
-    ArrayList<Plafond> ListePlafond = new ArrayList<>();
-    ArrayList<Piece> ListePiece = new ArrayList<>();
     
     
 
@@ -115,65 +111,62 @@ public class App extends Application {
     
     private Scene createSceneRevetement(boolean mur, boolean sol, boolean plafond, double area) {
       
-    ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
-    
+        ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
 
-    // Création de la liste des revêtements disponibles
-    ListView<String> listView = new ListView<>();
-    ObservableList<String> items = FXCollections.observableArrayList();
-    for (int j = 0; j <= listeRevetement.size()-1; j++) {
-        ligne = listeRevetement.get(j);
-        morceauxSplit = ligne.split(";");
-        items.add(morceauxSplit[0] + " : " +morceauxSplit[1]+" à "+ morceauxSplit[5]+ " euros");
-    }
-    listView.setItems(items);
-    Label ConsigneLabel = new Label("Indiquez l'indice du revetement choisi.");
-    // Création de la zone d'entrée clavier
-    TextField textField = new TextField();
-    textField.setPrefWidth(200);
 
-    // Création du bouton pour valider la saisie
-    Button button = new Button("Valider");
-    button.setOnAction(event -> {
-        int prixTexte = Integer.parseInt(textField.getText());
-        try {
-            prix = ProjetDevisBatiment.LectureRevetement(prixTexte);
-        } catch (NumberFormatException e) {
-            prix = 0;
+        // Création de la liste des revêtements disponibles
+        ListView<String> listView = new ListView<>();
+        ObservableList<String> items = FXCollections.observableArrayList();
+        for (int j = 0; j <= listeRevetement.size()-1; j++) {
+            ligne = listeRevetement.get(j);
+            morceauxSplit = ligne.split(";");
+            items.add(morceauxSplit[0] + " : " +morceauxSplit[1]+" à "+ morceauxSplit[5]+ " euros");
         }
-         
-        prixsurface.add(prix * area);
-        primaryStage.setScene(thirdScene);
-    });
+        listView.setItems(items);
+        Label ConsigneLabel = new Label("Indiquez l'indice du revetement choisi.");
+        // Création de la zone d'entrée clavier
+        TextField textField = new TextField();
+        textField.setPrefWidth(200);
 
-    // Création du conteneur VBox pour la liste des revêtements et la zone d'entrée clavier
-    VBox root = new VBox(10); // espacement de 10 pixels
-    root.getChildren().addAll(ConsigneLabel,listView, textField, button);
-    root.setAlignment(Pos.CENTER); // alignement vertical au centre
+        // Création du bouton pour valider la saisie
+        Button button = new Button("Valider");
+        button.setOnAction(event -> {
+            int prixTexte = Integer.parseInt(textField.getText());
+            try {
+                prix = ProjetDevisBatiment.LectureRevetement(prixTexte);
+            } catch (NumberFormatException e) {
+                prix = 0;
+            }
 
-    // Création du conteneur BorderPane
-    BorderPane borderPane = new BorderPane();
-    borderPane.setCenter(root); // placement du conteneur VBox au centre
+            prixsurface.add(prix * area);
+            primaryStage.setScene(thirdScene);
+        });
 
-    // Création de la scène
-    Scene scene = new Scene(borderPane, 800, 480);
+        // Création du conteneur VBox pour la liste des revêtements et la zone d'entrée clavier
+        VBox root = new VBox(10); // espacement de 10 pixels
+        root.getChildren().addAll(ConsigneLabel,listView, textField, button);
+        root.setAlignment(Pos.CENTER); // alignement vertical au centre
 
-    return scene;
-}
+        // Création du conteneur BorderPane
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(root); // placement du conteneur VBox au centre
+
+        // Création de la scène
+        Scene scene = new Scene(borderPane, 800, 480);
+
+        return scene;
+    }
     
     
     public void createThirdScene() throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
         drawingPane.setPrefSize(640, 480);
         
-        
-        
-        // Listes temporaires
-        ArrayList<Coin> TempListeCoin = new ArrayList<>();
-        ArrayList<Mur> TempListeMur = new ArrayList<>();
-        ArrayList<Sol> TempListeSol = new ArrayList<>();
-        ArrayList<Plafond> TempListePlafond = new ArrayList<>();
-        ArrayList<Piece> TempListePiece = new ArrayList<>();
+        ArrayList<Coin> ListeCoin = new ArrayList<>();
+        ArrayList<Mur> ListeMur = new ArrayList<>();
+        ArrayList<Sol> ListeSol = new ArrayList<>();
+        ArrayList<Plafond> ListePlafond = new ArrayList<>();
+        ArrayList<Piece> ListePiece = new ArrayList<>();
         
         final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
         
@@ -182,7 +175,7 @@ public class App extends Application {
         infoContainer.setPadding(new Insets(10));
         infoContainer.setMaxWidth(200);
 
-        
+         
         // BOUTON POUR OUVRIR LA SCENE CREATESCENEREVETEMENT
         Button buttonRevetement = new Button("Choisir un revetement pour un mur");
         buttonRevetement.setOnAction(event -> {
@@ -196,62 +189,47 @@ public class App extends Application {
         
         Button buttonPieceSuivante = new Button("Passer à la pièce suivante");
         buttonPieceSuivante.setOnAction(event -> {
-            drawingPane.getChildren().clear();
-            drawingPane.setDisable(false);
-            compt = 0;
-            for(int i=0; i<=TempListeCoin.size()-1;i++){
-                ListeCoin.add(TempListeCoin.get(i));
-            }
-            for(int i=0; i<=TempListeMur.size()-1;i++){
-                ListeMur.add(TempListeMur.get(i));
-            }
-            for(int i=0; i<=TempListeSol.size()-1;i++){
-                ListeSol.add(TempListeSol.get(i));
-            }
-            for(int i=0; i<=TempListePlafond.size()-1;i++){
-                ListePlafond = TempListePlafond;
-            }
-            for(int i=0; i<=TempListePiece.size()-1;i++){
-                ListePiece.add(TempListePiece.get(i));
-            }
-            TempListeCoin.clear();
-            TempListeMur.clear();
-            TempListeSol.clear();
-            TempListePlafond.clear();
-            TempListePiece.clear();
+           drawingPane.getChildren().clear();
+           drawingPane.setDisable(false);
+           compt = 0;
+           firstpoint = 0;
+           idMur=idMur-1;
+           piecefinie = false;
         });
         
         
         
         
         drawingPane.setOnMouseClicked(event -> {
-            compt++;
+            compt++; 
+            System.out.println(idCoin);
+            System.out.println(idMur);
             if(compt==0 || compt==1) {
                 drawingPane.setDisable(false);
             } else {drawingPane.setDisable(true);}
             double x = event.getX(); // Coordonnée X du clic de la souris
             double y = event.getY(); // Coordonnée Y du clic de la souris
             boolean r = false;
-            for (Coin test : TempListeCoin) {
+            for (Coin test : ListeCoin) {
                 double dist = calculateDistance(test.getX(), test.getY(), x, y);
                 if (dist <= rayon) {
                     // un point existe déjà dans le rayon spécifié
                     drawingPane.setDisable(true);
-                    Coin debut = TempListeCoin.get(idCoin-2);
+                    Coin debut = ListeCoin.get(idCoin-2);
                     Coin fin = test;
                     Mur mur = new Mur(idMur, debut, fin);
-                    TempListeMur.add(mur);
+                    ListeMur.add(mur);
                     
                         Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
                         ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                         drawingPane.getChildren().add(ligne);
                     
-                    Sol sol = new Sol(idSol, TempListeCoin, TempListeMur);
-                    TempListeSol.add(sol);
-                    Plafond plafond = new Plafond(idPlafond, TempListeCoin, TempListeMur);
-                    TempListePlafond.add(plafond);
-                    Piece piece = new Piece(idPiece, TempListeCoin,TempListeMur,TempListePlafond,TempListeSol); 
-                    TempListePiece.add(piece);
+                    Sol sol = new Sol(idSol, ListeCoin, ListeMur);
+                    ListeSol.add(sol);
+                    Plafond plafond = new Plafond(idPlafond, ListeCoin, ListeMur);
+                    ListePlafond.add(plafond);
+                    Piece piece = new Piece(idPiece, ListeCoin,ListeMur,ListePlafond,ListeSol); 
+                    ListePiece.add(piece);
                     idMur++;
                     idSol++;
                     idPlafond++;
@@ -272,32 +250,43 @@ public class App extends Application {
                 select.setStrokeWidth(2.0);
             }
             */
-            if(!r){
-                Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
-                
-                drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
-                Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
-                TempListeCoin.add(coin);
+            if (idPiece > 1 && firstpoint==0) {
+                if(!r){
+                    Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
 
-                
-                if (TempListeCoin.size() > 1) {
-                    Coin debut = TempListeCoin.get(idCoin-2);
-                    Coin fin = TempListeCoin.get(idCoin-1);
-                    Mur mur = new Mur(idMur, debut, fin);
-                    TempListeMur.add(mur);
-                    Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
-                    ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
-                    drawingPane.getChildren().add(ligne);
-                    idMur++;
+                    drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
+                    Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
+                    ListeCoin.add(coin);
                 }
-                
-                
+            } 
+            
+            
+            if(!r){
+                    Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
+
+                    drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
+                    Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
+                    ListeCoin.add(coin);
+              
+                    if (ListeCoin.size() > 1) {
+                        Coin debut = ListeCoin.get(idCoin-2);
+                        Coin fin = ListeCoin.get(idCoin-1);
+                        Mur mur = new Mur(idMur, debut, fin);
+                        ListeMur.add(mur);
+                        Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
+                        ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
+                        drawingPane.getChildren().add(ligne);
+                        idMur++;
+                    }
+            }
+               
 
                 idCoin++;
-            }
-            if (!TempListeMur.isEmpty()) {
+            
+            
+            if (!ListeMur.isEmpty() && idMur > 1) {
                 // S'il y a déjà un point précédent, on calcule la distance entre les deux points
-                double distance = TempListeMur.get(idMur-2).longueur();
+                double distance = ListeMur.get(idMur-2).longueur();
                 
 
                 // Affichage de la distance
@@ -333,7 +322,7 @@ public class App extends Application {
                         String heightText = heightInput.getText();
                         double height = Double.parseDouble(heightText);
                         // Calcul de l'aire du mur
-                        this.area = TempListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
+                        this.area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
                         // Affichage de l'aire du mur
                         Label areaLabel = new Label("Aire du mur: " + area + " pixels carrés");
                         areaLabel.setStyle("-fx-text-fill: green;");
@@ -348,28 +337,13 @@ public class App extends Application {
                 
                 // Ajout des labels au conteneur
             }    
-            
-            
+           
+        firstpoint++;  
             //previousPoint[0] = point; // Met à jour le point précédent
         });
         
         Button button = new Button("Terminer");
         button.setOnAction(event -> {
-            for(int i=0; i<=TempListeCoin.size()-1;i++){
-                ListeCoin.add(TempListeCoin.get(i));
-            }
-            for(int i=0; i<=TempListeMur.size()-1;i++){
-                ListeMur.add(TempListeMur.get(i));
-            }
-            for(int i=0; i<=TempListeSol.size()-1;i++){
-                ListeSol.add(TempListeSol.get(i));
-            }
-            for(int i=0; i<=TempListePlafond.size()-1;i++){
-                ListePlafond = TempListePlafond;
-            }
-            for(int i=0; i<=TempListePiece.size()-1;i++){
-                ListePiece.add(TempListePiece.get(i));
-            }
             FileWriter fileWriter = null;
             BufferedWriter bufferedWriter = null;
             primaryStage.close();
@@ -415,7 +389,7 @@ public class App extends Application {
         VBox mainRoot = new VBox(10);
         mainRoot.setAlignment(Pos.CENTER);
         mainRoot.getChildren().addAll(rootContainer, buttonPieceSuivante, button);
-
+        
         thirdScene = new Scene(mainRoot, 800, 480);
     }
 

@@ -101,12 +101,12 @@ public class ProjetDevisBatiment {
                     }
                     // ON ENREGISTRE LE PRIX DE LA PIECE N°I EN I-EME POSITION DU TABLEAU POUR CALCULER LE PRIX DE L'APPARTEMENT
                     prixpieces[comptpieces-1] = prixtotalpiece;
-                    Piece p = DemandePiece(ListeMur);
+                    
 
 
                     // Boucle qui écrit les murs dans le fichier txt
 
-                    bufferedWriter.write(p.idPiece + ";" + p.listesMur);
+                    
                     bufferedWriter.newLine();
 
                 }
@@ -170,12 +170,7 @@ public class ProjetDevisBatiment {
         return c;
     }
     
-    public static Piece DemandePiece(ArrayList ListeMur) {
-        Piece p;
-        p = new Piece(idPiece, idSol, idPlafond, ListeMur);
-        idPiece++;
-        return p;
-    }
+    
     
     public static Mur DemandeMur(int id, List ListeCoin) {
         System.out.println("Quel est l'id du coin de début du mur ?");
