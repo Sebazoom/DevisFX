@@ -37,13 +37,22 @@ public class App extends Application {
     private Scene mainScene;
     private Scene thirdScene;
     String ligne;
+    
     double area;
     int idCoin = 1;
+    int idSol = 1;
+    int idPlafond = 1;
     int idMur = 1;
+    int idPiece = 1;
     int nbrfenetre = 0, nbrporte = 0;
     String[] morceauxSplit = new String[6];
     double prix = -1;
     ArrayList<Double> prixsurface = new ArrayList<>();
+    // Zone de réponse
+    TextField heightInput = new TextField();
+    TextField porteInput = new TextField();
+    TextField fenetreInput = new TextField();
+    
     
 
     @Override
@@ -153,13 +162,11 @@ public class App extends Application {
         
         ArrayList<Coin> ListeCoin = new ArrayList<>();
         ArrayList<Mur> ListeMur = new ArrayList<>();
+        ArrayList<Sol> ListeSol = new ArrayList<>();
+        ArrayList<Plafond> ListePlafond = new ArrayList<>();
+        ArrayList<Piece> ListePiece = new ArrayList<>();
+        
         final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
-        
-        
-        VBox toolscontainer = new VBox(10); // Conteneur pour afficher les informations
-        toolscontainer.setAlignment(Pos.TOP_LEFT);
-        toolscontainer.setPadding(new Insets(10));
-        toolscontainer.setMaxWidth(75);
         
         VBox infoContainer = new VBox(10); // Conteneur pour afficher les informations
         infoContainer.setAlignment(Pos.TOP_RIGHT);
@@ -174,19 +181,12 @@ public class App extends Application {
             primaryStage.setScene(sceneRevetement);
         });
         
-        Button buttonTools = new Button("Coin");
-        buttonTools.setOnAction(event -> {
-            
-        }
-        );
         
-        
-
-        //final Circle[] previousPoint = {null}; // Utilisation d'un tableau pour stocker la référence du point précédent
         
         
         
         drawingPane.setOnMouseClicked(event -> {
+            
             double x = event.getX(); // Coordonnée X du clic de la souris
             double y = event.getY(); // Coordonnée Y du clic de la souris
             boolean r = false;
@@ -201,11 +201,20 @@ public class App extends Application {
                     Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
                     ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                     drawingPane.getChildren().add(ligne);
+                    Sol sol = new Sol(idSol, ListeCoin, ListeMur);
+                    ListeSol.add(sol);
+                    Plafond plafond = new Plafond(idPlafond, ListeCoin, ListeMur);
+                    ListePlafond.add(plafond);
+                    Piece piece = new Piece(idPiece, ListeCoin,ListeMur); 
+                    ListePiece.add(piece);
                     idMur++;
                     r=true;
                     break;
+                    
                 }
             }
+            
+            
             /*
             if (select != null) {
                 // appliquer un style de sélection au point sélectionné
@@ -232,6 +241,8 @@ public class App extends Application {
                     drawingPane.getChildren().add(ligne);
                     idMur++;
                 }
+                
+                
 
                 idCoin++;
             }
@@ -253,10 +264,7 @@ public class App extends Application {
                 Label porteLabel = new Label("Combien y a-t-il de portes dans le mur ?");
                 Label fenetreLabel = new Label("Combien y a-t-il de fenetres dans le mur ?");
 
-                // Zone de réponse
-                TextField heightInput = new TextField();
-                TextField porteInput = new TextField();
-                TextField fenetreInput = new TextField();
+                
                 
                 infoContainer.getChildren().clear();
                 infoContainer.getChildren().addAll(distanceLabel, heightLabel, heightInput, porteLabel, porteInput, fenetreLabel, fenetreInput);
@@ -289,17 +297,18 @@ public class App extends Application {
                         infoContainer.getChildren().clear();
                         infoContainer.getChildren().addAll(distanceLabel, areaLabel, buttonRevetement);
                         // Ajout des labels au conteneur
-                       
+                        
                     }
                 });
                 
-                // Ajout des labels au conteneur
                 
-            }
-
+                // Ajout des labels au conteneur
+            }    
+            
+            
             //previousPoint[0] = point; // Met à jour le point précédent
         });
-
+        
         Button button = new Button("Terminer");
         button.setOnAction(event -> {
             FileWriter fileWriter = null;
@@ -315,20 +324,27 @@ public class App extends Application {
                     bufferedWriter.write(coin.toString());
                     bufferedWriter.newLine();
                 }
-                
-                
                 bufferedWriter.flush();
+                
+                
                 for (Mur mur : ListeMur) {
                     // Traiter chaque objet Coin de la liste
                     bufferedWriter.write(mur.toString());
                     bufferedWriter.newLine();
                 }
-
+                bufferedWriter.flush();
+                
+                
+                bufferedWriter.write(ListeSol.get(0).toString());
+                bufferedWriter.flush();
+                bufferedWriter.newLine();
+                bufferedWriter.write(ListePlafond.get(0).toString());
                 bufferedWriter.flush();
                 bufferedWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        
         });
 
         HBox rootContainer = new HBox(10);
