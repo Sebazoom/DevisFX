@@ -196,33 +196,46 @@ public class ProjetDevisBatiment {
     
     
 
-    public static String RevetementDispo(int m, int s, int p) { // m=1 si mur, s=1 si sol, p=1 si plafond
-        StringBuilder sb = new StringBuilder();
-        sb.append("Voici les revêtements disponibles pour cette surface :\n");
+    public static ArrayList RevetementDispo(boolean mur, boolean sol, boolean plafond) { // m=1 si mur, s=1 si sol, p=1 si plafond
+        ArrayList<String> listeMur = new ArrayList<>();
+        ArrayList<String> listeSol = new ArrayList<>();
+        ArrayList<String> listePlafond = new ArrayList<>();
+        
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("C:\\Users\\sjoub\\Documents\\NetBeansProjects\\DevisBatiment\\src\\main\\java\\fr\\insa\\jouble\\projetdevisbatiment\\CatalogueRevetement.txt"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("C:\\Users\\sjoub\\Documents\\NetBeansProjects\\DevisFX\\src\\main\\java\\fr\\insa\\jouble\\javafxdevis\\CatalogueRevetement.txt"));
             String ligne = bufferedReader.readLine();
-
+            
             while (ligne != null) {
                 String[] morceaux = ligne.split(";");
+                System.out.println(ligne);
+                if (morceaux[2].equals("1")) {
+                    listeMur.add(ligne);
+                }
+                if (morceaux[3].equals("1")) {
+                    listeSol.add(ligne);
+                }
+                if (morceaux[4].equals("1")) {
+                    listePlafond.add(ligne);
+                }
                 ligne = bufferedReader.readLine();
-                if (morceaux[2].equals(String.valueOf(m)) && (morceaux[2].equals("1"))) {
-                    sb.append(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5] + "\n");
-                }
-                if (morceaux[3].equals(String.valueOf(s))&& (morceaux[3].equals("1"))) {
-                    sb.append(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5] + "\n");
-                }
-                if (morceaux[4].equals(String.valueOf(p))&& (morceaux[4].equals("1"))) {
-                    sb.append(morceaux[0] + ";" + morceaux[1]+ ";" + morceaux[5] + "\n");
-                }
+
             }
 
         } catch (FileNotFoundException err) {
-            sb.append("Erreur : le fichier n’existe pas!\n " + err);
+            System.out.println("Erreur : le fichier n’existe pas!\n " + err);
         } catch (IOException err) {
-            sb.append("Erreur :\n " + err);
+            System.out.println("Erreur :\n " + err);
         }
-        return sb.toString();
+        
+        if (mur) {
+            return listeMur;
+        }
+        if (sol) {
+            return listeSol;
+        }
+        else {
+            return listePlafond;
+        }
     }
 
 

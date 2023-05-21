@@ -14,7 +14,15 @@ public class Piece {
         this.listeCoin = listeCoin;
         this.listeMur = listeMur;
     }
-    
-   
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Piece{");
+        sb.append("idPiece=").append(idPiece);
+        sb.append(", cx=").append(listeCoin);
+        sb.append(", cy=").append(listeMur);
+        sb.append('}');
+        return sb.toString();
+    }
    
 }
