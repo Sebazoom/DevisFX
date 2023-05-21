@@ -48,5 +48,5 @@ public class Coin {
     int getID() {
         return idCoin;
     }
-            
+    
 }
