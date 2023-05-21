@@ -207,7 +207,6 @@ public class ProjetDevisBatiment {
             
             while (ligne != null) {
                 String[] morceaux = ligne.split(";");
-                System.out.println(ligne);
                 if (morceaux[2].equals("1")) {
                     listeMur.add(ligne);
                 }

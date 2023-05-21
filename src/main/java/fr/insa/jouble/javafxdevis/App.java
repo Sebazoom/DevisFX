@@ -37,7 +37,8 @@ public class App extends Application {
     private Scene mainScene;
     private Scene thirdScene;
     String ligne;
-    
+    int compt = 0;
+    boolean piecefinie =false;
     double area;
     int idCoin = 1;
     int idSol = 1;
@@ -179,14 +180,28 @@ public class App extends Application {
         buttonRevetement.setOnAction(event -> {
             Scene sceneRevetement = createSceneRevetement(true,false,false, area);
             primaryStage.setScene(sceneRevetement);
+            if (!piecefinie) {
+                drawingPane.setDisable(false);
+                compt = 0;//Si on clique sur le bouton, on peut à nouveau dessiner les nouveaux 
+            }
+        });
+        
+        Button buttonPieceSuivante = new Button("Passer à la pièce suivante");
+        buttonPieceSuivante.setOnAction(event -> {
+           drawingPane.getChildren().clear();
+           drawingPane.setDisable(false);
+           compt = 0;
         });
         
         
         
         
-        
         drawingPane.setOnMouseClicked(event -> {
-            
+            compt++;
+            System.out.println(compt);
+            if(compt==0 || compt==1) {
+                drawingPane.setDisable(false);
+            } else {drawingPane.setDisable(true);}
             double x = event.getX(); // Coordonnée X du clic de la souris
             double y = event.getY(); // Coordonnée Y du clic de la souris
             boolean r = false;
@@ -194,21 +209,28 @@ public class App extends Application {
                 double dist = calculateDistance(test.getX(), test.getY(), x, y);
                 if (dist <= rayon) {
                     // un point existe déjà dans le rayon spécifié
+                    drawingPane.setDisable(true);
                     Coin debut = ListeCoin.get(idCoin-2);
                     Coin fin = test;
                     Mur mur = new Mur(idMur, debut, fin);
                     ListeMur.add(mur);
+                    if (compt>0) {
                     Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
                     ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                     drawingPane.getChildren().add(ligne);
+                    }
                     Sol sol = new Sol(idSol, ListeCoin, ListeMur);
                     ListeSol.add(sol);
                     Plafond plafond = new Plafond(idPlafond, ListeCoin, ListeMur);
                     ListePlafond.add(plafond);
-                    Piece piece = new Piece(idPiece, ListeCoin,ListeMur); 
+                    Piece piece = new Piece(idPiece, ListeCoin,ListeMur,ListePlafond,ListeSol); 
                     ListePiece.add(piece);
                     idMur++;
+                    idSol++;
+                    idPlafond++;
+                    idPiece++;
                     r=true;
+                    piecefinie = true;
                     break;
                     
                 }
@@ -225,12 +247,12 @@ public class App extends Application {
             */
             if(!r){
                 Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
-
+                
                 drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
                 Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
                 ListeCoin.add(coin);
 
-
+                if (compt>0) {
                 if (ListeCoin.size() > 1) {
                     Coin debut = ListeCoin.get(idCoin-2);
                     Coin fin = ListeCoin.get(idCoin-1);
@@ -241,7 +263,7 @@ public class App extends Application {
                     drawingPane.getChildren().add(ligne);
                     idMur++;
                 }
-                
+                }
                 
 
                 idCoin++;
@@ -335,6 +357,9 @@ public class App extends Application {
                 bufferedWriter.newLine();
                 bufferedWriter.write(ListePlafond.get(0).toString());
                 bufferedWriter.flush();
+                bufferedWriter.newLine();
+                bufferedWriter.write(ListePiece.get(0).toString());
+                bufferedWriter.flush();
                 bufferedWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -347,7 +372,7 @@ public class App extends Application {
 
         VBox mainRoot = new VBox(10);
         mainRoot.setAlignment(Pos.CENTER);
-        mainRoot.getChildren().addAll(rootContainer, button);
+        mainRoot.getChildren().addAll(rootContainer, buttonPieceSuivante, button);
 
         thirdScene = new Scene(mainRoot, 800, 480);
     }

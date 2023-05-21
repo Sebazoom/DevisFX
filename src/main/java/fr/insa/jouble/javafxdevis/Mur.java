@@ -43,5 +43,7 @@ public class Mur {
     public String toString() {
         return "Mur{" + "idMur=" + idMur + ", debut=" + debut + ", fin=" + fin + '}';
     }
-    
+    int getID() {
+        return idMur;
+    }
 }

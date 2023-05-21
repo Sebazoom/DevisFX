@@ -1,3 +1,1 @@
-Coin{idCoin=1, cx=179.2, cy=185.6}
-Coin{idCoin=2, cx=245.6, cy=276.0}
-Mur{idMur=1, debut=Coin{idCoin=1, cx=179.2, cy=185.6}, fin=Coin{idCoin=2, cx=245.6, cy=276.0}}
+Coin{idCoin=1, cx=152.0, cy=128.0}
