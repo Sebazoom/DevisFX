@@ -1,1 +1,11 @@
-Coin{idCoin=1, cx=152.0, cy=128.0}
+Coin{idCoin=1, cx=139.2, cy=184.0}
+Coin{idCoin=2, cx=224.8, cy=340.0}
+Coin{idCoin=3, cx=316.8, cy=173.6}
+Coin{idCoin=4, cx=296.8, cy=176.8}
+Coin{idCoin=5, cx=428.8, cy=192.0}
+Coin{idCoin=5, cx=234.4, cy=226.4}
+Coin{idCoin=6, cx=356.8, cy=252.8}
+Mur{idMur=1, debut=Coin{idCoin=1, cx=139.2, cy=184.0}, fin=Coin{idCoin=2, cx=224.8, cy=340.0}}
+Mur{idMur=2, debut=Coin{idCoin=2, cx=224.8, cy=340.0}, fin=Coin{idCoin=3, cx=316.8, cy=173.6}}
+Mur{idMur=3, debut=Coin{idCoin=3, cx=316.8, cy=173.6}, fin=Coin{idCoin=1, cx=139.2, cy=184.0}}
+Sol{idSol=1, id des Coins= {5;6;}, surface=15678.720000000001}

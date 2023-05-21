@@ -53,6 +53,11 @@ public class App extends Application {
     TextField heightInput = new TextField();
     TextField porteInput = new TextField();
     TextField fenetreInput = new TextField();
+    ArrayList<Coin> ListeCoin = new ArrayList<>();
+    ArrayList<Mur> ListeMur = new ArrayList<>();
+    ArrayList<Sol> ListeSol = new ArrayList<>();
+    ArrayList<Plafond> ListePlafond = new ArrayList<>();
+    ArrayList<Piece> ListePiece = new ArrayList<>();
     
     
 
@@ -161,11 +166,14 @@ public class App extends Application {
         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
         drawingPane.setPrefSize(640, 480);
         
-        ArrayList<Coin> ListeCoin = new ArrayList<>();
-        ArrayList<Mur> ListeMur = new ArrayList<>();
-        ArrayList<Sol> ListeSol = new ArrayList<>();
-        ArrayList<Plafond> ListePlafond = new ArrayList<>();
-        ArrayList<Piece> ListePiece = new ArrayList<>();
+        
+        
+        // Listes temporaires
+        ArrayList<Coin> TempListeCoin = new ArrayList<>();
+        ArrayList<Mur> TempListeMur = new ArrayList<>();
+        ArrayList<Sol> TempListeSol = new ArrayList<>();
+        ArrayList<Plafond> TempListePlafond = new ArrayList<>();
+        ArrayList<Piece> TempListePiece = new ArrayList<>();
         
         final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
         
@@ -188,9 +196,29 @@ public class App extends Application {
         
         Button buttonPieceSuivante = new Button("Passer à la pièce suivante");
         buttonPieceSuivante.setOnAction(event -> {
-           drawingPane.getChildren().clear();
-           drawingPane.setDisable(false);
-           compt = 0;
+            drawingPane.getChildren().clear();
+            drawingPane.setDisable(false);
+            compt = 0;
+            for(int i=0; i<=TempListeCoin.size()-1;i++){
+                ListeCoin.add(TempListeCoin.get(i));
+            }
+            for(int i=0; i<=TempListeMur.size()-1;i++){
+                ListeMur.add(TempListeMur.get(i));
+            }
+            for(int i=0; i<=TempListeSol.size()-1;i++){
+                ListeSol.add(TempListeSol.get(i));
+            }
+            for(int i=0; i<=TempListePlafond.size()-1;i++){
+                ListePlafond = TempListePlafond;
+            }
+            for(int i=0; i<=TempListePiece.size()-1;i++){
+                ListePiece.add(TempListePiece.get(i));
+            }
+            TempListeCoin.clear();
+            TempListeMur.clear();
+            TempListeSol.clear();
+            TempListePlafond.clear();
+            TempListePiece.clear();
         });
         
         
@@ -198,33 +226,32 @@ public class App extends Application {
         
         drawingPane.setOnMouseClicked(event -> {
             compt++;
-            System.out.println(compt);
             if(compt==0 || compt==1) {
                 drawingPane.setDisable(false);
             } else {drawingPane.setDisable(true);}
             double x = event.getX(); // Coordonnée X du clic de la souris
             double y = event.getY(); // Coordonnée Y du clic de la souris
             boolean r = false;
-            for (Coin test : ListeCoin) {
+            for (Coin test : TempListeCoin) {
                 double dist = calculateDistance(test.getX(), test.getY(), x, y);
                 if (dist <= rayon) {
                     // un point existe déjà dans le rayon spécifié
                     drawingPane.setDisable(true);
-                    Coin debut = ListeCoin.get(idCoin-2);
+                    Coin debut = TempListeCoin.get(idCoin-2);
                     Coin fin = test;
                     Mur mur = new Mur(idMur, debut, fin);
-                    ListeMur.add(mur);
-                    if (compt>0) {
-                    Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
-                    ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
-                    drawingPane.getChildren().add(ligne);
-                    }
-                    Sol sol = new Sol(idSol, ListeCoin, ListeMur);
-                    ListeSol.add(sol);
-                    Plafond plafond = new Plafond(idPlafond, ListeCoin, ListeMur);
-                    ListePlafond.add(plafond);
-                    Piece piece = new Piece(idPiece, ListeCoin,ListeMur,ListePlafond,ListeSol); 
-                    ListePiece.add(piece);
+                    TempListeMur.add(mur);
+                    
+                        Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
+                        ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
+                        drawingPane.getChildren().add(ligne);
+                    
+                    Sol sol = new Sol(idSol, TempListeCoin, TempListeMur);
+                    TempListeSol.add(sol);
+                    Plafond plafond = new Plafond(idPlafond, TempListeCoin, TempListeMur);
+                    TempListePlafond.add(plafond);
+                    Piece piece = new Piece(idPiece, TempListeCoin,TempListeMur,TempListePlafond,TempListeSol); 
+                    TempListePiece.add(piece);
                     idMur++;
                     idSol++;
                     idPlafond++;
@@ -250,27 +277,27 @@ public class App extends Application {
                 
                 drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
                 Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
-                ListeCoin.add(coin);
+                TempListeCoin.add(coin);
 
-                if (compt>0) {
-                if (ListeCoin.size() > 1) {
-                    Coin debut = ListeCoin.get(idCoin-2);
-                    Coin fin = ListeCoin.get(idCoin-1);
+                
+                if (TempListeCoin.size() > 1) {
+                    Coin debut = TempListeCoin.get(idCoin-2);
+                    Coin fin = TempListeCoin.get(idCoin-1);
                     Mur mur = new Mur(idMur, debut, fin);
-                    ListeMur.add(mur);
+                    TempListeMur.add(mur);
                     Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
                     ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                     drawingPane.getChildren().add(ligne);
                     idMur++;
                 }
-                }
+                
                 
 
                 idCoin++;
             }
-            if (!ListeMur.isEmpty()) {
+            if (!TempListeMur.isEmpty()) {
                 // S'il y a déjà un point précédent, on calcule la distance entre les deux points
-                double distance = ListeMur.get(idMur-2).longueur();
+                double distance = TempListeMur.get(idMur-2).longueur();
                 
 
                 // Affichage de la distance
@@ -306,7 +333,7 @@ public class App extends Application {
                         String heightText = heightInput.getText();
                         double height = Double.parseDouble(heightText);
                         // Calcul de l'aire du mur
-                        this.area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
+                        this.area = TempListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
                         // Affichage de l'aire du mur
                         Label areaLabel = new Label("Aire du mur: " + area + " pixels carrés");
                         areaLabel.setStyle("-fx-text-fill: green;");
@@ -328,6 +355,21 @@ public class App extends Application {
         
         Button button = new Button("Terminer");
         button.setOnAction(event -> {
+            for(int i=0; i<=TempListeCoin.size()-1;i++){
+                ListeCoin.add(TempListeCoin.get(i));
+            }
+            for(int i=0; i<=TempListeMur.size()-1;i++){
+                ListeMur.add(TempListeMur.get(i));
+            }
+            for(int i=0; i<=TempListeSol.size()-1;i++){
+                ListeSol.add(TempListeSol.get(i));
+            }
+            for(int i=0; i<=TempListePlafond.size()-1;i++){
+                ListePlafond = TempListePlafond;
+            }
+            for(int i=0; i<=TempListePiece.size()-1;i++){
+                ListePiece.add(TempListePiece.get(i));
+            }
             FileWriter fileWriter = null;
             BufferedWriter bufferedWriter = null;
             primaryStage.close();
