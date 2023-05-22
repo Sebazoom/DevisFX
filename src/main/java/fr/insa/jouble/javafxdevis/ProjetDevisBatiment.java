@@ -197,7 +197,11 @@ public class ProjetDevisBatiment {
         ArrayList<String> listePlafond = new ArrayList<>();
         
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("C:\\Users\\sjoub\\Documents\\NetBeansProjects\\DevisFX\\src\\main\\java\\fr\\insa\\jouble\\javafxdevis\\CatalogueRevetement.txt"));
+            // Obtenir le répertoire de travail actuel de l'application
+            String workingDir = System.getProperty("user.dir");
+            // Définir le chemin d'accès relatif du répertoire de sauvegarde
+            String saveDirectory = workingDir + File.separator + "src\\main\\java\\fr\\insa\\jouble\\javafxdevis\\CatalogueRevetement.txt";
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(saveDirectory));
             String ligne = bufferedReader.readLine();
             
             while (ligne != null) {
