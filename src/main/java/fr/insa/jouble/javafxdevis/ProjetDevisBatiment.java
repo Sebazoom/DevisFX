@@ -15,6 +15,10 @@ import java.util.*;
  */
 public class ProjetDevisBatiment {
     
+    // Obtenir le répertoire de travail actuel de l'application
+    static String workingDir = System.getProperty("user.dir");
+    // Définir le chemin d'accès relatif du répertoire de sauvegarde
+    static String saveDirectory = workingDir + File.separator + "src\\main\\java\\fr\\insa\\jouble\\javafxdevis\\CatalogueRevetement.txt";
     static int idCoin = 1;
     static int idMur = 1;
     static int idPiece = 1;
@@ -128,7 +132,7 @@ public class ProjetDevisBatiment {
             // Si le revêtement a déjà été lu, on le récupère depuis le cache
             return revetementsCache.get(recherche);
         }
-        String fileName = "C:\\Users\\sjoub\\Documents\\NetBeansProjects\\DevisBatiment\\src\\main\\java\\fr\\insa\\jouble\\projetdevisbatiment\\CatalogueRevetement.txt";
+        String fileName = saveDirectory;
         Double prixunitaire = null;
         try {
             FileReader fileReader = new FileReader(fileName);
@@ -197,10 +201,6 @@ public class ProjetDevisBatiment {
         ArrayList<String> listePlafond = new ArrayList<>();
         
         try {
-            // Obtenir le répertoire de travail actuel de l'application
-            String workingDir = System.getProperty("user.dir");
-            // Définir le chemin d'accès relatif du répertoire de sauvegarde
-            String saveDirectory = workingDir + File.separator + "src\\main\\java\\fr\\insa\\jouble\\javafxdevis\\CatalogueRevetement.txt";
             BufferedReader bufferedReader = new BufferedReader(new FileReader(saveDirectory));
             String ligne = bufferedReader.readLine();
             
