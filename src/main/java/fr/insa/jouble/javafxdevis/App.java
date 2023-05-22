@@ -368,16 +368,29 @@ public class App extends Application {
                 }
                 bufferedWriter.flush();
                 
+                for (Sol sol : ListeSol) {
+                    // Traiter chaque objet Coin de la liste
+                    bufferedWriter.write(sol.toString());
+                    bufferedWriter.newLine();
+                }
+                bufferedWriter.flush();
                 
-                bufferedWriter.write(ListeSol.get(0).toString());
+                for (Plafond plafond : ListePlafond) {
+                    // Traiter chaque objet Coin de la liste
+                    bufferedWriter.write(plafond.toString());
+                    bufferedWriter.newLine();
+                }
                 bufferedWriter.flush();
-                bufferedWriter.newLine();
-                bufferedWriter.write(ListePlafond.get(0).toString());
+                
+                for (Piece piece : ListePiece) {
+                    // Traiter chaque objet Coin de la liste
+                    bufferedWriter.write(piece.toString());
+                    bufferedWriter.newLine();
+                }
                 bufferedWriter.flush();
-                bufferedWriter.newLine();
-                bufferedWriter.write(ListePiece.get(0).toString());
-                bufferedWriter.flush();
+                
                 bufferedWriter.close();
+                
             } catch (IOException e) {
                 e.printStackTrace();
             }
