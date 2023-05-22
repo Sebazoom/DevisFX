@@ -260,14 +260,14 @@ public class App extends Application {
                 }
             } 
             
-            
-            if(!r){
+            else {
+                if(!r){
                     Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
 
                     drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
                     Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
                     ListeCoin.add(coin);
-              
+
                     if (ListeCoin.size() > 1) {
                         Coin debut = ListeCoin.get(idCoin-2);
                         Coin fin = ListeCoin.get(idCoin-1);
@@ -278,6 +278,7 @@ public class App extends Application {
                         drawingPane.getChildren().add(ligne);
                         idMur++;
                     }
+                }
             }
                
 
