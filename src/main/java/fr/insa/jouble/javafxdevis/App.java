@@ -277,6 +277,7 @@ public class App extends Application {
                         ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                         drawingPane.getChildren().add(ligne);
                         idMur++;
+                        drawingPane.setDisable(true);
                     }
                 }
             }
@@ -285,7 +286,7 @@ public class App extends Application {
                 idCoin++;
             
             
-            if (!ListeMur.isEmpty() && idMur > 1) {
+            if (!ListeMur.isEmpty()) {
                 // S'il y a déjà un point précédent, on calcule la distance entre les deux points
                 double distance = ListeMur.get(idMur-2).longueur();
                 

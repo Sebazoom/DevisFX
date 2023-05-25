@@ -13,8 +13,11 @@ public class Coin {
     @Override
      public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Coin;");
         sb.append(idCoin);
+        sb.append(";");
         sb.append(cx);
+        sb.append(";");
         sb.append(cy);
         
         return sb.toString();

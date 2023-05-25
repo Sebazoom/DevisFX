@@ -1,17 +1,10 @@
-Coin{idCoin=1, cx=200.8, cy=100.8}
-Coin{idCoin=2, cx=376.8, cy=117.6}
-Coin{idCoin=3, cx=235.2, cy=300.8}
-Coin{idCoin=5, cx=276.8, cy=148.8}
-Coin{idCoin=5, cx=276.8, cy=148.8}
-Coin{idCoin=6, cx=416.8, cy=167.2}
-Coin{idCoin=7, cx=296.0, cy=282.4}
-Mur{idMur=1, debut=Coin{idCoin=1, cx=200.8, cy=100.8}, fin=Coin{idCoin=2, cx=376.8, cy=117.6}}
-Mur{idMur=2, debut=Coin{idCoin=2, cx=376.8, cy=117.6}, fin=Coin{idCoin=3, cx=235.2, cy=300.8}}
-Mur{idMur=3, debut=Coin{idCoin=3, cx=235.2, cy=300.8}, fin=Coin{idCoin=1, cx=200.8, cy=100.8}}
-Mur{idMur=3, debut=Coin{idCoin=5, cx=276.8, cy=148.8}, fin=Coin{idCoin=5, cx=276.8, cy=148.8}}
-Mur{idMur=4, debut=Coin{idCoin=5, cx=276.8, cy=148.8}, fin=Coin{idCoin=6, cx=416.8, cy=167.2}}
-Mur{idMur=5, debut=Coin{idCoin=6, cx=416.8, cy=167.2}, fin=Coin{idCoin=7, cx=296.0, cy=282.4}}
-Mur{idMur=6, debut=Coin{idCoin=7, cx=296.0, cy=282.4}, fin=Coin{idCoin=5, cx=276.8, cy=148.8}}
-Sol{idSol=1, id des Coins= {1;2;3;5;5;6;7;}, surface=53612.8}
-Plafond{idPlafond=1, id des Coins= {1;2;3;5;5;6;7;}, surface=53612.8}
-Piece{idPiece=1, id des Coins= {1;2;3;5;5;6;7;}, id des Murs= {1;2;3;3;4;5;6;}, id du Sol=1, id du Plafond=1}
+1190.4174.4
+2368.8337.6
+3396.892.0
+5485.681.6
+6215.2163.2
+6392.8264.0
+Mur{idMur=1, debut=1190.4174.4, fin=2368.8337.6}
+Mur{idMur=2, debut=2368.8337.6, fin=3396.892.0}
+Mur{idMur=3, debut=3396.892.0, fin=1190.4174.4}
+Mur{idMur=3, debut=6215.2163.2, fin=6392.8264.0}
