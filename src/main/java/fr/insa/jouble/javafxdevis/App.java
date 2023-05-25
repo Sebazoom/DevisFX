@@ -193,7 +193,7 @@ public class App extends Application {
            drawingPane.setDisable(false);
            compt = 0;
            firstpoint = 0;
-           idMur=idMur-1;
+           idCoin = idCoin -1;
            piecefinie = false;
         });
         
@@ -283,7 +283,7 @@ public class App extends Application {
             }
                
 
-                idCoin++;
+         
             
             
             if (!ListeMur.isEmpty()) {
@@ -339,7 +339,7 @@ public class App extends Application {
                 
                 // Ajout des labels au conteneur
             }    
-           
+        idCoin++;  
         firstpoint++;  
             //previousPoint[0] = point; // Met à jour le point précédent
         });

@@ -55,7 +55,7 @@ public class Sol {
         for(int i=0; i<=listeCoin.size()-1; i++){
             sb.append(listeCoin.get(i).getID());
             sb.append(";");
-        ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
+        //ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
         
         
 
