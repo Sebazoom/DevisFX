@@ -11,13 +11,12 @@ package fr.insa.jouble.javafxdevis;
 public class Coin {
 
     @Override
-    public String toString() {
+     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Coin{");
-        sb.append("idCoin=").append(idCoin);
-        sb.append(", cx=").append(cx);
-        sb.append(", cy=").append(cy);
-        sb.append('}');
+        sb.append(idCoin);
+        sb.append(cx);
+        sb.append(cy);
+        
         return sb.toString();
     }
     // Attributs
