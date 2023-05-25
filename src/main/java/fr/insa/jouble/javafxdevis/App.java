@@ -55,7 +55,7 @@ public class App extends Application {
     TextField porteInput = new TextField();
     TextField fenetreInput = new TextField();
     
-    ArrayList<Coin> ListeCoinTEMP = new ArrayList<>();
+    
     
     
 
@@ -169,6 +169,7 @@ public class App extends Application {
         ArrayList<Sol> ListeSol = new ArrayList<>();
         ArrayList<Plafond> ListePlafond = new ArrayList<>();
         ArrayList<Piece> ListePiece = new ArrayList<>();
+        ArrayList<Coin> ListeCoinTEMP = new ArrayList<>();
         
         final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
         
