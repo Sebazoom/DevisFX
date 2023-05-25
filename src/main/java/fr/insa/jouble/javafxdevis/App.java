@@ -403,6 +403,17 @@ public class App extends Application {
             }
         
         });
+        
+                /*      Future sauvegarde à l'arrache
+        // Affichage des pièces sur le conteneur
+        for (Piece piece : pieces) {
+            for (Coin coin : piece.getCoins()) {
+                Circle circle = new Circle(coin.getX(), coin.getY(), 5, Color.BLACK);
+                pane.getChildren().add(circle);
+            }
+        }
+        
+        */
 
         HBox rootContainer = new HBox(10);
         rootContainer.getChildren().addAll(drawingPane, infoContainer);
