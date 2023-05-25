@@ -55,6 +55,8 @@ public class App extends Application {
     TextField porteInput = new TextField();
     TextField fenetreInput = new TextField();
     
+    ArrayList<Coin> ListeCoinTEMP = new ArrayList<>();
+    
     
 
     @Override
@@ -191,6 +193,7 @@ public class App extends Application {
         buttonPieceSuivante.setOnAction(event -> {
            drawingPane.getChildren().clear();
            drawingPane.setDisable(false);
+           ListeCoinTEMP.clear();
            compt = 0;
            firstpoint = 0;
            idCoin = idCoin -1;
@@ -224,11 +227,11 @@ public class App extends Application {
                         ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                         drawingPane.getChildren().add(ligne);
                     
-                    Sol sol = new Sol(idSol, ListeCoin, ListeMur);
+                    Sol sol = new Sol(idSol, ListeCoinTEMP, ListeMur);
                     ListeSol.add(sol);
-                    Plafond plafond = new Plafond(idPlafond, ListeCoin, ListeMur);
+                    Plafond plafond = new Plafond(idPlafond, ListeCoinTEMP, ListeMur);
                     ListePlafond.add(plafond);
-                    Piece piece = new Piece(idPiece, ListeCoin,ListeMur,ListePlafond,ListeSol); 
+                    Piece piece = new Piece(idPiece, ListeCoinTEMP,ListeMur,ListePlafond,ListeSol); 
                     ListePiece.add(piece);
                     idMur++;
                     idSol++;
@@ -257,6 +260,7 @@ public class App extends Application {
                     drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
                     Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
                     ListeCoin.add(coin);
+                    ListeCoinTEMP.add(coin);
                 }
             } 
             
@@ -267,7 +271,8 @@ public class App extends Application {
                     drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
                     Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
                     ListeCoin.add(coin);
-
+                    ListeCoinTEMP.add(coin);
+                    
                     if (ListeCoin.size() > 1) {
                         Coin debut = ListeCoin.get(idCoin-2);
                         Coin fin = ListeCoin.get(idCoin-1);
