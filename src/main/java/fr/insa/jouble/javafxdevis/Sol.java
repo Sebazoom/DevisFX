@@ -50,8 +50,10 @@ public class Sol {
     }
     @Override
     public String toString() {
-       StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Sol;");
         sb.append(idSol);
+        sb.append(";");
         for(int i=0; i<=listeCoin.size()-1; i++){
             sb.append(listeCoin.get(i).getID());
             sb.append(";");
