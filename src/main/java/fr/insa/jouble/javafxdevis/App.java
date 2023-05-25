@@ -58,6 +58,8 @@ public class App extends Application {
     
     
     
+    
+    
 
     @Override
     public void start(Stage stage) {
@@ -170,6 +172,7 @@ public class App extends Application {
         ArrayList<Plafond> ListePlafond = new ArrayList<>();
         ArrayList<Piece> ListePiece = new ArrayList<>();
         ArrayList<Coin> ListeCoinTEMP = new ArrayList<>();
+        ArrayList<Mur> ListeMurTEMP = new ArrayList<>();
         
         final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
         
@@ -194,7 +197,7 @@ public class App extends Application {
         buttonPieceSuivante.setOnAction(event -> {
            drawingPane.getChildren().clear();
            drawingPane.setDisable(false);
-           ListeCoinTEMP.clear();
+           
            compt = 0;
            firstpoint = 0;
            idCoin = idCoin -1;
@@ -223,17 +226,26 @@ public class App extends Application {
                     Coin fin = test;
                     Mur mur = new Mur(idMur, debut, fin);
                     ListeMur.add(mur);
+                    ListeMurTEMP.add(mur);
                     
-                        Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
-                        ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
-                        drawingPane.getChildren().add(ligne);
+                    Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
+                    ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
+                    drawingPane.getChildren().add(ligne);
                     
-                    Sol sol = new Sol(idSol, ListeCoinTEMP, ListeMur);
+                    Sol sol = new Sol(idSol, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP)); // copie de la liste ListeCoinTEMP pour éviterde modifier la liste originale
                     ListeSol.add(sol);
-                    Plafond plafond = new Plafond(idPlafond, ListeCoinTEMP, ListeMur);
+
+                    // création d'un nouveau Plafond
+                    Plafond plafond = new Plafond(idPlafond, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP));
+                    // copie de la liste ListeCoinTEMP pour éviter de modifier la liste originale
                     ListePlafond.add(plafond);
-                    Piece piece = new Piece(idPiece, ListeCoinTEMP,ListeMur,ListePlafond,ListeSol); 
+
+                    // effacement des éléments de la liste ListeCoinTEMP
+                    ListeCoinTEMP.clear();
+                    
+                    Piece piece = new Piece(idPiece, new ArrayList<>(ListeMurTEMP),idSol, idPlafond); 
                     ListePiece.add(piece);
+                    ListeMurTEMP.clear();
                     idMur++;
                     idSol++;
                     idPlafond++;
@@ -279,6 +291,7 @@ public class App extends Application {
                         Coin fin = ListeCoin.get(idCoin-1);
                         Mur mur = new Mur(idMur, debut, fin);
                         ListeMur.add(mur);
+                        ListeMurTEMP.add(mur);
                         Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
                         ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                         drawingPane.getChildren().add(ligne);
@@ -288,7 +301,11 @@ public class App extends Application {
                 }
             }
                
-
+            for (Coin coin : ListeCoinTEMP) {
+                    // Traiter chaque objet Coin de la liste
+                    System.out.println(coin.toString());
+                    
+                }
          
             
             
