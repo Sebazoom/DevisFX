@@ -51,19 +51,20 @@ public class Sol {
     @Override
     public String toString() {
        StringBuilder sb = new StringBuilder();
-        sb.append("Sol{");
-        sb.append("idSol=").append(idSol);
-        sb.append(", id des Coins= {");
+        sb.append(idSol);
         for(int i=0; i<=listeCoin.size()-1; i++){
             sb.append(listeCoin.get(i).getID());
             sb.append(";");
+        ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
+        
+        
+
+        
         }
-        sb.append('}');
-        sb.append(", surface=");
-        sb.append(this.surface());
-        sb.append('}');
-        return sb.toString(); 
-    } 
+        return sb.toString();
+    }
+
+     
     
     double distancePointSegment(ArrayList<Coin> listeCoin) {
         double dx = listeCoin.get(2).getX() - listeCoin.get(1).getX();
