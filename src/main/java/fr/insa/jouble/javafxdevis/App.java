@@ -45,13 +45,14 @@ public class App extends Application {
     double area;
     double areaSol;
     double areaPlafond;
-    double heightFirstWall;
     int idCoin = 1;
     int idSol = 1;
     boolean FirstWall = true;
     int idPlafond = 1;
     int idMur = 1;
     int idPiece = 1;
+    int idAppart = 1;
+    int idNiveau = 1;
     int idRevetement;
     int nbrfenetre = 0, nbrporte = 0;
     String[] morceauxSplit = new String[6];

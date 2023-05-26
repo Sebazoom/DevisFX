@@ -33,4 +33,7 @@ public class Piece {
         return sb.toString();
     }
    
+    int getID() {
+        return idPiece;
+    }
 }
