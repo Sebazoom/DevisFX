@@ -12,16 +12,17 @@ import javafx.scene.layout.Pane;
  * @author sjoub
  */
 public class Sol {
-    int idSol;
+    int idSol, idRevetement;
     ArrayList<Coin> listeCoin;
     ArrayList<Mur> listeMur;
     // ArrayList<Revetements> listeRevetements;
     // private Pane drawingPane;
     
-    Sol(int idSol, ArrayList<Coin> listeCoin, ArrayList<Mur> listeMur) {
+    Sol(int idSol, ArrayList<Coin> listeCoin, ArrayList<Mur> listeMur, int idRevetement) {
         this.idSol = idSol;
         this.listeCoin = listeCoin;
         this.listeMur = listeMur;
+        this.idRevetement = idRevetement;
         /*double xhg=drawingPane.getWidth(), yhg=drawingPane.getHeight(), xhd=0, yhd=drawingPane.getWidth(), xbg=drawingPane.getWidth(), ybg=0, xbd=0, ybd=0;
         for (Coin test : listeCoin) {
             if (test.getID()<2) {
@@ -57,12 +58,14 @@ public class Sol {
         for(int i=0; i<=listeCoin.size()-1; i++){
             sb.append(listeCoin.get(i).getID());
             sb.append(";");
+        }
+        sb.append(idRevetement);
         //ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
         
         
 
         
-        }
+        
         return sb.toString();
     }
 
