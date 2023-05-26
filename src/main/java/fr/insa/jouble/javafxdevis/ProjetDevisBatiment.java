@@ -224,7 +224,7 @@ public class ProjetDevisBatiment {
         }
     }
     
-    
+    /*
     public static double MontantNiveau (int id){ 
                     double montant=0;
                     
