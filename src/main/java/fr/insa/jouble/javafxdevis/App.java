@@ -152,6 +152,7 @@ public class App extends Application {
 
         mainScene = new Scene(mainRoot, 640, 480);
     }
+    /*
     private Scene FirstWallScene() {
         Label heightLabel = new Label("Quelle est la hauteur du mur ?");
         TextField heightInput2 = new TextField();
@@ -170,7 +171,7 @@ public class App extends Application {
         FirstWallScene = new Scene(mainRoot, 600, 480);
         return FirstWallScene;
     }
-    
+    */
     
     private Scene createSceneRevetement(boolean mur, boolean sol, boolean plafond, double area) {
       
@@ -299,12 +300,12 @@ public class App extends Application {
                     ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                     drawingPane.getChildren().add(ligne);
                     
-                    Sol sol = new Sol(idSol, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP)); // copie de la liste ListeCoinTEMP pour éviterde modifier la liste originale
+                    Sol sol = new Sol(idSol, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP), idRevetement); // copie de la liste ListeCoinTEMP pour éviterde modifier la liste originale
                     areaSol = sol.surface();
                     ListeSol.add(sol);
 
                     // création d'un nouveau Plafond
-                    Plafond plafond = new Plafond(idPlafond, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP));
+                    Plafond plafond = new Plafond(idPlafond, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP), idRevetement);
                     // copie de la liste ListeCoinTEMP pour éviter de modifier la liste originale
                     areaPlafond = plafond.surface();
                     ListePlafond.add(plafond);
@@ -356,11 +357,11 @@ public class App extends Application {
                     ListeCoinTEMP.add(coin);
                     
                     if (ListeCoin.size() > 1) {
-                        if (FirstWall) {
-                            primaryStage.setScene(FirstWallScene());
-                            area = ProjetDevisBatiment.Distance(ListeCoin.get(0), ListeCoin.get(1))*heightFirstWall;
+                        //if (FirstWall) {
+                          //  primaryStage.setScene(FirstWallScene());
+                            //area = ProjetDevisBatiment.Distance(ListeCoin.get(0), ListeCoin.get(1))*heightFirstWall;
                             
-                        }
+                        //}
                         Coin debut = ListeCoin.get(idCoin-2);
                         Coin fin = ListeCoin.get(idCoin-1);
                         Mur mur = new Mur(idMur, debut, fin, idRevetement);
