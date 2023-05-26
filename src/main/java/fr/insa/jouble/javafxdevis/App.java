@@ -36,16 +36,23 @@ public class App extends Application {
     private Scene welcomeScene;
     private Scene mainScene;
     private Scene thirdScene;
+    private Scene finScene;
+    private Scene FirstWallScene;
     String ligne;
     int compt = 0;
     int firstpoint = 0;
     boolean piecefinie =false;
     double area;
+    double areaSol;
+    double areaPlafond;
+    double heightFirstWall;
     int idCoin = 1;
     int idSol = 1;
+    boolean FirstWall = true;
     int idPlafond = 1;
     int idMur = 1;
     int idPiece = 1;
+    int idRevetement;
     int nbrfenetre = 0, nbrporte = 0;
     String[] morceauxSplit = new String[6];
     double prix = -1;
@@ -55,7 +62,13 @@ public class App extends Application {
     TextField porteInput = new TextField();
     TextField fenetreInput = new TextField();
     
-    
+    ArrayList<Coin> ListeCoin = new ArrayList<>();
+    ArrayList<Mur> ListeMur = new ArrayList<>();
+    ArrayList<Sol> ListeSol = new ArrayList<>();
+    ArrayList<Plafond> ListePlafond = new ArrayList<>();
+    ArrayList<Piece> ListePiece = new ArrayList<>();
+    ArrayList<Coin> ListeCoinTEMP = new ArrayList<>();
+    ArrayList<Mur> ListeMurTEMP = new ArrayList<>();
     
     
     
@@ -100,6 +113,35 @@ public class App extends Application {
 
         welcomeScene = new Scene(welcomeRoot, 640, 480);
     }
+    
+    private Scene finScene() {
+        double prix = 0;
+        
+        for(int i=0; i<=prixsurface.size()-1;i++){
+            prix = prix+ prixsurface.get(i);
+        }
+        
+        Label prixtotal = new Label("Le prix total de votre batîment est :");
+        Label prixtotal2 = new Label(Math.ceil(prix*100)/100 + " euros");
+        
+        Button button = new Button("Terminer");
+        button.setOnAction(event -> {
+            primaryStage.close();
+        });
+
+        VBox root = new VBox(10); // espacement de 10 pixels
+        root.getChildren().addAll(prixtotal,prixtotal2, button);
+        root.setAlignment(Pos.CENTER); // alignement vertical au centre
+
+        // Création du conteneur BorderPane
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(root);
+        
+        Scene scene = new Scene(borderPane, 800, 480);
+
+        return scene;
+    }
+    
 
     private void createMainScene() {
         Button button = new Button("Cliquez-moi !");
@@ -110,7 +152,24 @@ public class App extends Application {
 
         mainScene = new Scene(mainRoot, 640, 480);
     }
-    
+    private Scene FirstWallScene() {
+        Label heightLabel = new Label("Quelle est la hauteur du mur ?");
+        TextField heightInput2 = new TextField();
+        heightInput2.setOnKeyPressed(event1 -> {
+            if (event1.getCode() == KeyCode.ENTER) {
+                String heightText = heightInput2.getText();
+                heightFirstWall = Double.parseDouble(heightText);
+                Scene sceneRevetement = createSceneRevetement(true,false,false,heightFirstWall*ProjetDevisBatiment.Distance(ListeCoin.get(0), ListeCoin.get(1)));
+                primaryStage.setScene(sceneRevetement);
+            }  
+        });
+
+        VBox mainRoot = new VBox();
+        mainRoot.getChildren().addAll(heightLabel, heightInput2);
+
+        FirstWallScene = new Scene(mainRoot, 600, 480);
+        return FirstWallScene;
+    }
     
     
     private Scene createSceneRevetement(boolean mur, boolean sol, boolean plafond, double area) {
@@ -141,8 +200,12 @@ public class App extends Application {
             } catch (NumberFormatException e) {
                 prix = 0;
             }
+            if(FirstWall) {
+                
+            }
 
             prixsurface.add(prix * area);
+            idRevetement = prixTexte;
             primaryStage.setScene(thirdScene);
         });
 
@@ -156,8 +219,7 @@ public class App extends Application {
         borderPane.setCenter(root); // placement du conteneur VBox au centre
 
         // Création de la scène
-        Scene scene = new Scene(borderPane, 800, 480);
-
+        Scene scene = new Scene(borderPane, 850, 480);
         return scene;
     }
     
@@ -166,31 +228,35 @@ public class App extends Application {
         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
         drawingPane.setPrefSize(640, 480);
         
-        ArrayList<Coin> ListeCoin = new ArrayList<>();
-        ArrayList<Mur> ListeMur = new ArrayList<>();
-        ArrayList<Sol> ListeSol = new ArrayList<>();
-        ArrayList<Plafond> ListePlafond = new ArrayList<>();
-        ArrayList<Piece> ListePiece = new ArrayList<>();
-        ArrayList<Coin> ListeCoinTEMP = new ArrayList<>();
-        ArrayList<Mur> ListeMurTEMP = new ArrayList<>();
+        
         
         final double rayon = 15.0;  // rayon de la zone de recherche autour du clic de souris
         
         VBox infoContainer = new VBox(10); // Conteneur pour afficher les informations
         infoContainer.setAlignment(Pos.TOP_RIGHT);
         infoContainer.setPadding(new Insets(10));
-        infoContainer.setMaxWidth(200);
+        infoContainer.setMaxWidth(250);
 
          
         // BOUTON POUR OUVRIR LA SCENE CREATESCENEREVETEMENT
-        Button buttonRevetement = new Button("Choisir un revetement pour un mur");
-        buttonRevetement.setOnAction(event -> {
+        Button MurRevetement = new Button("Choisir un revetement pour un mur");
+        MurRevetement.setOnAction(event -> {
             Scene sceneRevetement = createSceneRevetement(true,false,false, area);
             primaryStage.setScene(sceneRevetement);
             if (!piecefinie) {
                 drawingPane.setDisable(false);
                 compt = 0;//Si on clique sur le bouton, on peut à nouveau dessiner les nouveaux 
             }
+        });
+        Button SolRevetement = new Button("Choisir un revetement pour un sol");
+        SolRevetement.setOnAction(event -> {
+            Scene sceneRevetement = createSceneRevetement(false,true,false, areaSol);
+            primaryStage.setScene(sceneRevetement);
+        });
+        Button PlafondRevetement = new Button("Choisir un revetement pour un plafond");
+        PlafondRevetement.setOnAction(event -> {
+            Scene sceneRevetement = createSceneRevetement(false,false,true, areaPlafond);
+            primaryStage.setScene(sceneRevetement);
         });
         
         Button buttonPieceSuivante = new Button("Passer à la pièce suivante");
@@ -220,11 +286,12 @@ public class App extends Application {
             for (Coin test : ListeCoin) {
                 double dist = calculateDistance(test.getX(), test.getY(), x, y);
                 if (dist <= rayon) {
+              
                     // un point existe déjà dans le rayon spécifié
                     drawingPane.setDisable(true);
                     Coin debut = ListeCoin.get(idCoin-2);
                     Coin fin = test;
-                    Mur mur = new Mur(idMur, debut, fin);
+                    Mur mur = new Mur(idMur, debut, fin, idRevetement);
                     ListeMur.add(mur);
                     ListeMurTEMP.add(mur);
                     
@@ -233,13 +300,15 @@ public class App extends Application {
                     drawingPane.getChildren().add(ligne);
                     
                     Sol sol = new Sol(idSol, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP)); // copie de la liste ListeCoinTEMP pour éviterde modifier la liste originale
+                    areaSol = sol.surface();
                     ListeSol.add(sol);
 
                     // création d'un nouveau Plafond
                     Plafond plafond = new Plafond(idPlafond, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP));
                     // copie de la liste ListeCoinTEMP pour éviter de modifier la liste originale
+                    areaPlafond = plafond.surface();
                     ListePlafond.add(plafond);
-
+                    
                     // effacement des éléments de la liste ListeCoinTEMP
                     ListeCoinTEMP.clear();
                     
@@ -287,9 +356,14 @@ public class App extends Application {
                     ListeCoinTEMP.add(coin);
                     
                     if (ListeCoin.size() > 1) {
+                        if (FirstWall) {
+                            primaryStage.setScene(FirstWallScene());
+                            area = ProjetDevisBatiment.Distance(ListeCoin.get(0), ListeCoin.get(1))*heightFirstWall;
+                            
+                        }
                         Coin debut = ListeCoin.get(idCoin-2);
                         Coin fin = ListeCoin.get(idCoin-1);
-                        Mur mur = new Mur(idMur, debut, fin);
+                        Mur mur = new Mur(idMur, debut, fin, idRevetement);
                         ListeMur.add(mur);
                         ListeMurTEMP.add(mur);
                         Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
@@ -301,11 +375,6 @@ public class App extends Application {
                 }
             }
                
-            for (Coin coin : ListeCoinTEMP) {
-                    // Traiter chaque objet Coin de la liste
-                    System.out.println(coin.toString());
-                    
-                }
          
             
             
@@ -315,7 +384,7 @@ public class App extends Application {
                 
 
                 // Affichage de la distance
-                Label distanceLabel = new Label("Distance: " + distance + " pixels");
+                Label distanceLabel = new Label("Distance: " + Math.ceil(distance*100)/100 + " pixels");
                 distanceLabel.setStyle("-fx-text-fill : red;");
                 // Affichage de la question
                 Label heightLabel = new Label("Quelle est la hauteur du mur ?");
@@ -349,13 +418,15 @@ public class App extends Application {
                         // Calcul de l'aire du mur
                         this.area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
                         // Affichage de l'aire du mur
-                        Label areaLabel = new Label("Aire du mur: " + area + " pixels carrés");
+                        Label areaLabel = new Label("Aire du mur: " + Math.ceil(area*100)/100 + " pixels carrés");
                         areaLabel.setStyle("-fx-text-fill: green;");
-                
+                        if(piecefinie){
                         infoContainer.getChildren().clear();
-                        infoContainer.getChildren().addAll(distanceLabel, areaLabel, buttonRevetement);
-                        // Ajout des labels au conteneur
-                        
+                        infoContainer.getChildren().addAll(distanceLabel, areaLabel, MurRevetement, SolRevetement, PlafondRevetement);
+                        } else {
+                            infoContainer.getChildren().clear();
+                            infoContainer.getChildren().addAll(distanceLabel, areaLabel, MurRevetement);
+                        }
                     }
                 });
                 
@@ -368,10 +439,10 @@ public class App extends Application {
         });
         
         Button button = new Button("Terminer");
-        button.setOnAction(event -> {
+        button.setOnAction(event ->  { primaryStage.setScene(finScene());
             FileWriter fileWriter = null;
             BufferedWriter bufferedWriter = null;
-            primaryStage.close();
+            
             try {
                 fileWriter = new FileWriter("DevisBatiment.txt");
                 bufferedWriter = new BufferedWriter(fileWriter);
@@ -439,8 +510,10 @@ public class App extends Application {
         mainRoot.setAlignment(Pos.CENTER);
         mainRoot.getChildren().addAll(rootContainer, buttonPieceSuivante, button);
         
-        thirdScene = new Scene(mainRoot, 800, 480);
+        thirdScene = new Scene(mainRoot, 850, 480);
     }
+    
+    
 
 private double calculateDistance(double x1, double y1, double x2, double y2) {
     double deltaX = x2 - x1;

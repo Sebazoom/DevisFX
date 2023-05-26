@@ -9,18 +9,20 @@ package fr.insa.jouble.javafxdevis;
  * @author Amadou Coulibaly
  */
 public class Mur {
-    int idMur;
+    int idMur, idRevetement;
     Coin debut, fin;
     final double surfacePorte = 1.89;
     final double surfaceFenetre = 1.44;
+    int nbfenetres;
+     int nbportes;
     
     
-    
-    Mur(int id, Coin dc, Coin fc)
+    Mur(int id, Coin dc, Coin fc, int idRevetement)
     {
         this.idMur=id;
         this.debut=dc;
         this.fin=fc;
+        this.idRevetement = idRevetement;
     }
     
     void afficher()
@@ -36,12 +38,27 @@ public class Mur {
     
     double surface(double hsp, int nbportes, int nbfenetres)
     {
+        this.nbfenetres = nbfenetres;
+        this.nbportes = nbportes;
         return(this.longueur()*hsp-surfaceFenetre*nbfenetres-surfacePorte*nbportes);
     }
     
     @Override
     public String toString() {
-        return "Mur{" + "idMur=" + idMur + ", debut=" + debut + ", fin=" + fin + '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Mur;");
+        sb.append(idMur);
+        sb.append(";");
+        sb.append(debut.getID());
+        sb.append(";");
+        sb.append(fin.getID());
+        sb.append(";");
+        sb.append(nbportes);
+        sb.append(";");
+        sb.append(nbfenetres);
+        sb.append(";");
+        sb.append(idRevetement);
+        return sb.toString();
     }
     int getID() {
         return idMur;

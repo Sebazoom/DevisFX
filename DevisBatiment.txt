@@ -1,18 +1,3 @@
-Coin;1;218.4;192.8
-Coin;2;456.0;180.0
-Coin;3;232.0;360.0
-Coin;4;419.2;99.2
-Coin;5;411.2;236.0
-Coin;6;243.2;173.6
-Mur{idMur=1, debut=Coin;1;218.4;192.8, fin=Coin;2;456.0;180.0}
-Mur{idMur=2, debut=Coin;2;456.0;180.0, fin=Coin;3;232.0;360.0}
-Mur{idMur=3, debut=Coin;3;232.0;360.0, fin=Coin;1;218.4;192.8}
-Mur{idMur=4, debut=Coin;4;419.2;99.2, fin=Coin;5;411.2;236.0}
-Mur{idMur=5, debut=Coin;5;411.2;236.0, fin=Coin;6;243.2;173.6}
-Mur{idMur=6, debut=Coin;6;243.2;173.6, fin=Coin;4;419.2;99.2}
-11;2;3;4;5;6;
-21;2;3;4;5;6;
-Plafond{idPlafond=1, id des Coins= {1;2;3;4;5;6;}, surface=103060.48000000001}
-Plafond{idPlafond=2, id des Coins= {1;2;3;4;5;6;}, surface=103060.48000000001}
-Piece{idPiece=1, id des Coins= {1;2;3;4;5;6;}, id des Murs= {1;2;3;4;5;6;}, id du Sol=1, id du Plafond=1}
-Piece{idPiece=2, id des Coins= {1;2;3;4;5;6;}, id des Murs= {1;2;3;4;5;6;}, id du Sol=2, id du Plafond=2}
+Coin;1;280.8;181.6
+Coin;2;414.4;245.6
+Mur;1;1;2;0;0;0
