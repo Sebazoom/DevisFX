@@ -268,7 +268,7 @@ public class App extends Application {
            
            compt = 0;
            firstpoint = 0;
-           idCoin = idCoin -1;
+           idCoin--;
            piecefinie = false;
         });
         
@@ -341,7 +341,6 @@ public class App extends Application {
                     idSol++;
                     idPlafond++;
                     idPiece++;
-                    idCoin--;
                     r=true;
                     piecefinie = true;
                     break;
