@@ -279,8 +279,19 @@ public class App extends Application {
            
            compt = 0;
            firstpoint = 0;
-           idCoin = idCoin -1;
            piecefinie = false;
+           idAppart++;
+        });
+        
+        Button buttonNiveauSuivant = new Button("Passer au niveau suivant");
+        buttonNiveauSuivant.setOnAction(event -> {
+           drawingPane.getChildren().clear();
+           drawingPane.setDisable(false);
+           
+           compt = 0;
+           firstpoint = 0;
+           piecefinie = false;
+           idNiveau++;
         });
         
         
@@ -330,6 +341,7 @@ public class App extends Application {
                     idSol++;
                     idPlafond++;
                     idPiece++;
+                    idCoin--;
                     r=true;
                     piecefinie = true;
                     break;
@@ -519,7 +531,7 @@ public class App extends Application {
 
         VBox Root1 = new VBox(10);
         Root1.setAlignment(Pos.CENTER_LEFT);
-        Root1.getChildren().addAll(buttonPieceSuivante);
+        Root1.getChildren().addAll(buttonPieceSuivante, buttonAppartSuivant, buttonNiveauSuivant);
         VBox Root2 = new VBox(10);
         Root2.setAlignment(Pos.CENTER);
         Root2.getChildren().addAll(button);
