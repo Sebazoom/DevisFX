@@ -11,8 +11,8 @@ package fr.insa.jouble.javafxdevis;
 public class Mur {
     int idMur, idRevetement;
     Coin debut, fin;
-    final double surfacePorte = 1.89;
-    final double surfaceFenetre = 1.44;
+    final double surfacePorte = 1.89*900;
+    final double surfaceFenetre = 1.44*900;
     int nbfenetres;
      int nbportes;
     

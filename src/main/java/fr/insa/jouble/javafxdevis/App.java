@@ -206,7 +206,7 @@ public class App extends Application {
                 
             }
 
-            prixsurface.add(prix * area);
+            prixsurface.add(prix * area/900);
             idRevetement = prixTexte;
             primaryStage.setScene(thirdScene);
         });
@@ -386,7 +386,7 @@ public class App extends Application {
                 
 
                 // Affichage de la distance
-                Label distanceLabel = new Label("Distance: " + Math.ceil(distance*100)/100 + " pixels");
+                Label distanceLabel = new Label("Distance: " + Math.ceil(distance/30*100)/100 + " mètres");
                 distanceLabel.setStyle("-fx-text-fill : red;");
                 // Affichage de la question
                 Label heightLabel = new Label("Quelle est la hauteur du mur ?");
@@ -416,11 +416,11 @@ public class App extends Application {
                 heightInput.setOnKeyPressed(event1 -> {
                     if (event1.getCode() == KeyCode.ENTER) {
                         String heightText = heightInput.getText();
-                        double height = Double.parseDouble(heightText);
+                        double height = 30*Double.parseDouble(heightText);
                         // Calcul de l'aire du mur
                         this.area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
                         // Affichage de l'aire du mur
-                        Label areaLabel = new Label("Aire du mur: " + Math.ceil(area*100)/100 + " pixels carrés");
+                        Label areaLabel = new Label("Aire du mur: " + Math.ceil(area/900*100)/100 + " mètres carrés");
                         areaLabel.setStyle("-fx-text-fill: green;");
                         if(piecefinie){
                         infoContainer.getChildren().clear();
