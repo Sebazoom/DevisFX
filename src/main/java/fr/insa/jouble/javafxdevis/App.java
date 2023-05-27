@@ -272,7 +272,16 @@ public class App extends Application {
            piecefinie = false;
         });
         
-        
+        Button buttonAppartSuivant = new Button("Passer à l'appartement suivant");
+        buttonAppartSuivant.setOnAction(event -> {
+           drawingPane.getChildren().clear();
+           drawingPane.setDisable(false);
+           
+           compt = 0;
+           firstpoint = 0;
+           idCoin = idCoin -1;
+           piecefinie = false;
+        });
         
         
         drawingPane.setOnMouseClicked(event -> {
@@ -508,10 +517,13 @@ public class App extends Application {
         HBox rootContainer = new HBox(10);
         rootContainer.getChildren().addAll(drawingPane, infoContainer);
 
-        VBox mainRoot = new VBox(10);
-        mainRoot.setAlignment(Pos.CENTER);
-        mainRoot.getChildren().addAll(rootContainer, buttonPieceSuivante, button);
-        
+        VBox Root1 = new VBox(10);
+        Root1.setAlignment(Pos.CENTER_LEFT);
+        Root1.getChildren().addAll(buttonPieceSuivante);
+        VBox Root2 = new VBox(10);
+        Root2.setAlignment(Pos.CENTER);
+        Root2.getChildren().addAll(button);
+        VBox mainRoot = new VBox(rootContainer, Root1, Root2);
         thirdScene = new Scene(mainRoot, 850, 480);
     }
     
