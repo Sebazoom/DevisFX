@@ -192,20 +192,29 @@ public class App extends Application {
         // Création de la zone d'entrée clavier
         TextField textField = new TextField();
         textField.setPrefWidth(200);
-
-        // Création du bouton pour valider la saisie
-        Button button = new Button("Valider");
-        button.setOnAction(event -> {
+        
+        textField.setOnAction(event -> {
             int prixTexte = Integer.parseInt(textField.getText());
             try {
                 prix = ProjetDevisBatiment.LectureRevetement(prixTexte);
             } catch (NumberFormatException e) {
                 prix = 0;
             }
-            if(FirstWall) {
-                
+            
+            prixsurface.add(prix * area/900);
+            idRevetement = prixTexte;
+            primaryStage.setScene(thirdScene);
+        });
+        
+        // Création du bouton pour valider la saisie
+        Button button = new Button("Valider");
+        button.setOnAction (event -> {
+            int prixTexte = Integer.parseInt(textField.getText());
+            try {
+                prix = ProjetDevisBatiment.LectureRevetement(prixTexte);
+            } catch (NumberFormatException e) {
+                prix = 0;
             }
-
             prixsurface.add(prix * area/900);
             idRevetement = prixTexte;
             primaryStage.setScene(thirdScene);
