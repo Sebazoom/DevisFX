@@ -475,29 +475,43 @@ public class App extends Application {
                 
                 
                 for (Mur mur : ListeMur) {
-                    // Traiter chaque objet Coin de la liste
+                    // Traiter chaque objet Mur de la liste
                     bufferedWriter.write(mur.toString());
                     bufferedWriter.newLine();
                 }
                 bufferedWriter.flush();
                 
                 for (Sol sol : ListeSol) {
-                    // Traiter chaque objet Coin de la liste
+                    // Traiter chaque objet Sol de la liste
                     bufferedWriter.write(sol.toString());
                     bufferedWriter.newLine();
                 }
                 bufferedWriter.flush();
                 
                 for (Plafond plafond : ListePlafond) {
-                    // Traiter chaque objet Coin de la liste
+                    // Traiter chaque objet Plafond de la liste
                     bufferedWriter.write(plafond.toString());
                     bufferedWriter.newLine();
                 }
                 bufferedWriter.flush();
                 
                 for (Piece piece : ListePiece) {
-                    // Traiter chaque objet Coin de la liste
+                    // Traiter chaque objet Piece de la liste
                     bufferedWriter.write(piece.toString());
+                    bufferedWriter.newLine();
+                }
+                bufferedWriter.flush();
+                
+                for (Appartement appart : ListeAppart) {
+                    // Traiter chaque objet Appartement de la liste
+                    bufferedWriter.write(appart.toString());
+                    bufferedWriter.newLine();
+                }
+                bufferedWriter.flush();
+                
+                for (Niveau niveau : ListeNiveau) {
+                    // Traiter chaque objet Coin de la liste
+                    bufferedWriter.write(niveau.toString());
                     bufferedWriter.newLine();
                 }
                 bufferedWriter.flush();
