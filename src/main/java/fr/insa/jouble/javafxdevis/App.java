@@ -37,7 +37,6 @@ public class App extends Application {
     private Scene mainScene;
     private Scene thirdScene;
     private Scene finScene;
-    private Scene FirstWallScene;
     String ligne;
     int compt = 0;
     int firstpoint = 0;
@@ -47,7 +46,6 @@ public class App extends Application {
     double areaPlafond;
     int idCoin = 1;
     int idSol = 1;
-    boolean FirstWall = true;
     int idPlafond = 1;
     int idMur = 1;
     int idPiece = 1;
@@ -56,7 +54,7 @@ public class App extends Application {
     int idRevetement;
     int nbrfenetre = 0, nbrporte = 0;
     String[] morceauxSplit = new String[6];
-    double prix = -1;
+    double prix = -1, hmax=0;
     ArrayList<Double> prixsurface = new ArrayList<>();
     // Zone de réponse
     TextField heightInput = new TextField();
@@ -70,8 +68,11 @@ public class App extends Application {
     ArrayList<Piece> ListePiece = new ArrayList<>();
     ArrayList<Coin> ListeCoinTEMP = new ArrayList<>();
     ArrayList<Mur> ListeMurTEMP = new ArrayList<>();
-    
-    
+    ArrayList<Piece> ListePieceTEMP = new ArrayList<>();
+    ArrayList<Appartement> ListeAppart = new ArrayList<>();
+    ArrayList<Appartement> ListeAppartTEMP = new ArrayList<>();
+    ArrayList<Niveau> ListeNiveau = new ArrayList<>();
+
     
     
 
@@ -153,27 +154,7 @@ public class App extends Application {
 
         mainScene = new Scene(mainRoot, 640, 480);
     }
-    /*
-    private Scene FirstWallScene() {
-        Label heightLabel = new Label("Quelle est la hauteur du mur ?");
-        TextField heightInput2 = new TextField();
-        heightInput2.setOnKeyPressed(event1 -> {
-            if (event1.getCode() == KeyCode.ENTER) {
-                String heightText = heightInput2.getText();
-                heightFirstWall = Double.parseDouble(heightText);
-                Scene sceneRevetement = createSceneRevetement(true,false,false,heightFirstWall*ProjetDevisBatiment.Distance(ListeCoin.get(0), ListeCoin.get(1)));
-                primaryStage.setScene(sceneRevetement);
-            }  
-        });
 
-        VBox mainRoot = new VBox();
-        mainRoot.getChildren().addAll(heightLabel, heightInput2);
-
-        FirstWallScene = new Scene(mainRoot, 600, 480);
-        return FirstWallScene;
-    }
-    */
-    
     private Scene createSceneRevetement(boolean mur, boolean sol, boolean plafond, double area) {
       
         ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
@@ -285,10 +266,14 @@ public class App extends Application {
         buttonAppartSuivant.setOnAction(event -> {
            drawingPane.getChildren().clear();
            drawingPane.setDisable(false);
-           
+           Appartement appart= new Appartement(idAppart, idNiveau, ListePieceTEMP);
+           ListeAppart.add(appart);
+           ListeAppartTEMP.add(appart);
+           ListePieceTEMP.clear();
            compt = 0;
            firstpoint = 0;
            piecefinie = false;
+           idCoin--;
            idAppart++;
         });
         
@@ -296,10 +281,13 @@ public class App extends Application {
         buttonNiveauSuivant.setOnAction(event -> {
            drawingPane.getChildren().clear();
            drawingPane.setDisable(false);
-           
+           Niveau niveau = new Niveau (idNiveau, hmax, ListeAppartTEMP);
+           ListeNiveau.add(niveau);
+           ListeAppartTEMP.clear();
            compt = 0;
            firstpoint = 0;
            piecefinie = false;
+           idCoin--;
            idNiveau++;
         });
         
@@ -345,6 +333,7 @@ public class App extends Application {
                     
                     Piece piece = new Piece(idPiece, new ArrayList<>(ListeMurTEMP),idSol, idPlafond); 
                     ListePiece.add(piece);
+                    ListePieceTEMP.add(piece);
                     ListeMurTEMP.clear();
                     idMur++;
                     idSol++;
@@ -387,11 +376,6 @@ public class App extends Application {
                     ListeCoinTEMP.add(coin);
                     
                     if (ListeCoin.size() > 1) {
-                        //if (FirstWall) {
-                          //  primaryStage.setScene(FirstWallScene());
-                            //area = ProjetDevisBatiment.Distance(ListeCoin.get(0), ListeCoin.get(1))*heightFirstWall;
-                            
-                        //}
                         Coin debut = ListeCoin.get(idCoin-2);
                         Coin fin = ListeCoin.get(idCoin-1);
                         Mur mur = new Mur(idMur, debut, fin, idRevetement);
@@ -446,6 +430,9 @@ public class App extends Application {
                     if (event1.getCode() == KeyCode.ENTER) {
                         String heightText = heightInput.getText();
                         double height = 30*Double.parseDouble(heightText);
+                        if (height>hmax){
+                            hmax=height;
+                        }
                         // Calcul de l'aire du mur
                         this.area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
                         // Affichage de l'aire du mur
