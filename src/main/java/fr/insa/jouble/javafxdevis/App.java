@@ -281,7 +281,7 @@ public class App extends Application {
         buttonNiveauSuivant.setOnAction(event -> {
            drawingPane.getChildren().clear();
            drawingPane.setDisable(false);
-           Niveau niveau = new Niveau (idNiveau, hmax, ListeAppartTEMP);
+           Niveau niveau = new Niveau (idNiveau, hmax/30, ListeAppartTEMP);
            ListeNiveau.add(niveau);
            ListeAppartTEMP.clear();
            compt = 0;
