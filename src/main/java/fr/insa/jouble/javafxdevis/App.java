@@ -40,7 +40,7 @@ public class App extends Application {
     String ligne;
     int compt = 0;
     int firstpoint = 0;
-    boolean piecefinie =false;
+    boolean piecefinie =false, r = false;
     double area;
     double areaSol;
     double areaPlafond;
@@ -251,47 +251,6 @@ public class App extends Application {
             primaryStage.setScene(sceneRevetement);
         });
         
-        Button buttonPieceSuivante = new Button("Passer à la pièce suivante");
-        buttonPieceSuivante.setOnAction(event -> {
-           drawingPane.getChildren().clear();
-           drawingPane.setDisable(false);
-           
-           compt = 0;
-           firstpoint = 0;
-           idCoin--;
-           piecefinie = false;
-        });
-        
-        Button buttonAppartSuivant = new Button("Passer à l'appartement suivant");
-        buttonAppartSuivant.setOnAction(event -> {
-           drawingPane.getChildren().clear();
-           drawingPane.setDisable(false);
-           Appartement appart= new Appartement(idAppart, idNiveau, ListePieceTEMP);
-           ListeAppart.add(appart);
-           ListeAppartTEMP.add(appart);
-           ListePieceTEMP.clear();
-           compt = 0;
-           firstpoint = 0;
-           piecefinie = false;
-           idCoin--;
-           idAppart++;
-        });
-        
-        Button buttonNiveauSuivant = new Button("Passer au niveau suivant");
-        buttonNiveauSuivant.setOnAction(event -> {
-           drawingPane.getChildren().clear();
-           drawingPane.setDisable(false);
-           Niveau niveau = new Niveau (idNiveau, hmax/30, ListeAppartTEMP);
-           ListeNiveau.add(niveau);
-           ListeAppartTEMP.clear();
-           compt = 0;
-           firstpoint = 0;
-           piecefinie = false;
-           idCoin--;
-           idNiveau++;
-        });
-        
-        
         drawingPane.setOnMouseClicked(event -> {
             compt++; 
             System.out.println(idCoin);
@@ -301,11 +260,11 @@ public class App extends Application {
             } else {drawingPane.setDisable(true);}
             double x = event.getX(); // Coordonnée X du clic de la souris
             double y = event.getY(); // Coordonnée Y du clic de la souris
-            boolean r = false;
+            r = false;
             for (Coin test : ListeCoin) {
                 double dist = calculateDistance(test.getX(), test.getY(), x, y);
                 if (dist <= rayon) {
-              
+                
                     // un point existe déjà dans le rayon spécifié
                     drawingPane.setDisable(true);
                     Coin debut = ListeCoin.get(idCoin-2);
@@ -321,7 +280,7 @@ public class App extends Application {
                     Sol sol = new Sol(idSol, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP), idRevetement); // copie de la liste ListeCoinTEMP pour éviterde modifier la liste originale
                     areaSol = sol.surface();
                     ListeSol.add(sol);
-
+                    
                     // création d'un nouveau Plafond
                     Plafond plafond = new Plafond(idPlafond, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP), idRevetement);
                     // copie de la liste ListeCoinTEMP pour éviter de modifier la liste originale
@@ -346,15 +305,6 @@ public class App extends Application {
                 }
             }
             
-            
-            /*
-            if (select != null) {
-                // appliquer un style de sélection au point sélectionné
-                select.setFill(Color.BLUE);
-                select.setStroke(Color.RED);
-                select.setStrokeWidth(2.0);
-            }
-            */
             if (idPiece > 1 && firstpoint==0) {
                 if(!r){
                     Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
@@ -455,6 +405,54 @@ public class App extends Application {
         firstpoint++;  
             //previousPoint[0] = point; // Met à jour le point précédent
         });
+        
+        
+        Button buttonPieceSuivante = new Button("Passer à la pièce suivante");
+        buttonPieceSuivante.setOnAction(event -> {
+           if (r){
+                drawingPane.getChildren().clear();
+                drawingPane.setDisable(false);
+
+                compt = 0;
+                firstpoint = 0;
+                idCoin--;
+                piecefinie = false;
+           }
+        });
+        
+        Button buttonAppartSuivant = new Button("Passer à l'appartement suivant");
+        buttonAppartSuivant.setOnAction(event -> {
+           if (r){
+                drawingPane.getChildren().clear();
+                drawingPane.setDisable(false);
+                Appartement appart= new Appartement(idAppart, idNiveau, ListePieceTEMP);
+                ListeAppart.add(appart);
+                ListeAppartTEMP.add(appart);
+                ListePieceTEMP.clear();
+                compt = 0;
+                firstpoint = 0;
+                piecefinie = false;
+                idCoin--;
+                idAppart++;
+           }
+        });
+        
+        Button buttonNiveauSuivant = new Button("Passer au niveau suivant");
+        buttonNiveauSuivant.setOnAction(event -> {
+            if (r){
+                drawingPane.getChildren().clear();
+                drawingPane.setDisable(false);
+                Niveau niveau = new Niveau (idNiveau, hmax/30, ListeAppartTEMP);
+                ListeNiveau.add(niveau);
+                ListeAppartTEMP.clear();
+                compt = 0;
+                firstpoint = 0;
+                piecefinie = false;
+                idCoin--;
+                idNiveau++;
+            }
+        });
+        
         
         Button button = new Button("Terminer");
         button.setOnAction(event ->  { primaryStage.setScene(finScene());
