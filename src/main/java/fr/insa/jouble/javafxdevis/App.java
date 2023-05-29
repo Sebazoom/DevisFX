@@ -267,6 +267,7 @@ public class App extends Application {
             }
             prixsurface.add(prix * area/900);
             idRevetement = prixTexte;
+            ListeMur.get(idMur-2).idRevetement=prixTexte;
             primaryStage.setScene(thirdScene);
         });
 
@@ -374,38 +375,34 @@ public class App extends Application {
                 }
             }
             
-            if (idPiece > 1 && firstpoint==0) {
-                if(!r){
-                    Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
+            if (idPiece > 1 && firstpoint==0 && !r) {
+                Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
 
-                    drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
-                    Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
-                    ListeCoin.add(coin);
-                    ListeCoinTEMP.add(coin);
-                }
+                drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
+                Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
+                ListeCoin.add(coin);
+                ListeCoinTEMP.add(coin);
             } 
             
-            else {
-                if(!r){
-                    Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
+            else if(!r){
+                Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
 
-                    drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
-                    Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
-                    ListeCoin.add(coin);
-                    ListeCoinTEMP.add(coin);
-                    
-                    if (ListeCoin.size() > 1) {
-                        Coin debut = ListeCoin.get(idCoin-2);
-                        Coin fin = ListeCoin.get(idCoin-1);
-                        Mur mur = new Mur(idMur, debut, fin, nbrporte, nbrfenetre, idRevetement);
-                        ListeMur.add(mur);
-                        ListeMurTEMP.add(mur);
-                        Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
-                        ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
-                        drawingPane.getChildren().add(ligne);
-                        idMur++;
-                        drawingPane.setDisable(true);
-                    }
+                drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
+                Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
+                ListeCoin.add(coin);
+                ListeCoinTEMP.add(coin);
+
+                if (ListeCoin.size() > 1) {
+                    Coin debut = ListeCoin.get(idCoin-2);
+                    Coin fin = ListeCoin.get(idCoin-1);
+                    Mur mur = new Mur(idMur, debut, fin, nbrporte, nbrfenetre, idRevetement);
+                    ListeMur.add(mur);
+                    ListeMurTEMP.add(mur);
+                    Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
+                    ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
+                    drawingPane.getChildren().add(ligne);
+                    idMur++;
+                    drawingPane.setDisable(true);
                 }
             }
          
