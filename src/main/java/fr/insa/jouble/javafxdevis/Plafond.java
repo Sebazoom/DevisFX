@@ -11,8 +11,8 @@ import java.util.ArrayList;
  */
 public class Plafond extends Sol {
    int IdRevetement;
-    public Plafond(int idPlafond, ArrayList<Coin> listeCoin, ArrayList<Mur> listeMur, int idRevetement) {
-        super(idPlafond, listeCoin, listeMur, idRevetement);
+    public Plafond(int idPlafond, ArrayList<Coin> listeCoin, int idRevetement) {
+        super(idPlafond, listeCoin, idRevetement);
         this.IdRevetement = idRevetement;
     }  
     @Override

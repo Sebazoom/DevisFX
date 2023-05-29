@@ -1,6 +1,7 @@
 package fr.insa.jouble.javafxdevis;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.FileChooser;
 
 
 public class App extends Application {
@@ -55,6 +57,9 @@ public class App extends Application {
     int nbrfenetre = 0, nbrporte = 0;
     String[] morceauxSplit = new String[6];
     double prix = -1, hmax=0;
+    double prixMurs = 0;
+    double prixPlafonds = 0;
+    double prixSols = 0;
     ArrayList<Double> prixsurface = new ArrayList<>();
     // Zone de réponse
     TextField heightInput = new TextField();
@@ -144,15 +149,82 @@ public class App extends Application {
         return scene;
     }
     
+    private Scene finScene2() {       
+        
+        double prixDevis = prixMurs + prixPlafonds + prixSols; 
+        Label prixtotal = new Label("Le prix total de votre batîment est :");
+        Label prixtotal2 = new Label(Math.ceil(prixDevis*100)/100 + " euros");
+        
+        Button button = new Button("Terminer");
+        button.setOnAction(event -> {
+            primaryStage.close();
+        });
+
+        VBox root = new VBox(10); // espacement de 10 pixels
+        root.getChildren().addAll(prixtotal,prixtotal2, button);
+        root.setAlignment(Pos.CENTER); // alignement vertical au centre
+
+        // Création du conteneur BorderPane
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(root);
+        
+        Scene scene = new Scene(borderPane, 800, 480);
+
+        return scene;
+    }
+    
 
     private void createMainScene() {
-        Button button = new Button("Cliquez-moi !");
-        button.setOnAction(event -> primaryStage.setScene(thirdScene));
+        Button buttonDessiner = new Button("Dessiner");
+        buttonDessiner.setOnAction(event -> primaryStage.setScene(thirdScene));
+        Button buttonDevis = new Button("Faire le devis d'une sauvegarde");
+        VBox mainRoot = new VBox(10);
+        mainRoot.setAlignment(Pos.CENTER);
+        
+        buttonDevis.setOnAction(event -> { 
+        FileChooser fileChooser = new FileChooser();
 
-        StackPane mainRoot = new StackPane();
-        mainRoot.getChildren().add(button);
+        // Configurer le FileChooser
+        fileChooser.setTitle("Choisir un fichier");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Fichiers texte", "*.txt"),
+            new FileChooser.ExtensionFilter("Tous les fichiers", "*.*"));
 
+        // Ouvrir la boîte de dialogue pour choisir le fichier
+        Stage stage = new Stage();
+        stage.setTitle("FileChooser");
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        primaryStage.setScene(finScene2());
+        // Vérifier si un fichier a été sélectionné
+        if (selectedFile != null) {
+            // Faire quelque chose avec le fichier sélectionné, par exemple l'afficher dans une zone de texte
+                       
+        System.out.println("niveau " + ProjetDevisBatiment.Fonctiontest(1, selectedFile.getAbsolutePath()));
+        
+        int nombreMurs = ProjetDevisBatiment.NbrMur(selectedFile.getAbsolutePath());
+        int nombreSols = ProjetDevisBatiment.NbrSol(selectedFile.getAbsolutePath());
+        int nombrePlafonds = ProjetDevisBatiment.NbrPlafond(selectedFile.getAbsolutePath());
+        System.out.println(nombreMurs);
+        System.out.println(nombreSols);
+        System.out.println(nombrePlafonds);
+        for(int i=1; i<=nombreMurs; i++) {
+            prixMurs = prixMurs + ProjetDevisBatiment.MontantMurs(i, selectedFile.getAbsolutePath());
+            System.out.println("prixMurs " + prixMurs);
+        }
+        for(int i=1; i<=nombreSols; i++) {
+            prixSols = prixSols + ProjetDevisBatiment.MontantSol(i, selectedFile.getAbsolutePath());
+            System.out.println("prixSols " +prixSols);
+        }
+        for(int i=1; i<=nombrePlafonds; i++) {
+            prixPlafonds = prixPlafonds + ProjetDevisBatiment.MontantPlafond(i, selectedFile.getAbsolutePath());
+            System.out.println("prixPlafonds " +prixPlafonds);
+        }
+        }
+        });
+        mainRoot.getChildren().addAll(buttonDessiner, buttonDevis);
+        
         mainScene = new Scene(mainRoot, 640, 480);
+        
     }
 
     private Scene createSceneRevetement(boolean mur, boolean sol, boolean plafond, double area) {
@@ -269,7 +341,7 @@ public class App extends Application {
                     drawingPane.setDisable(true);
                     Coin debut = ListeCoin.get(idCoin-2);
                     Coin fin = test;
-                    Mur mur = new Mur(idMur, debut, fin, idRevetement);
+                    Mur mur = new Mur(idMur, debut, fin, nbrporte, nbrfenetre, idRevetement);
                     ListeMur.add(mur);
                     ListeMurTEMP.add(mur);
                     
@@ -277,12 +349,12 @@ public class App extends Application {
                     ligne.setStrokeWidth(5); ligne.setStroke(Color.BLACK);
                     drawingPane.getChildren().add(ligne);
                     
-                    Sol sol = new Sol(idSol, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP), idRevetement); // copie de la liste ListeCoinTEMP pour éviterde modifier la liste originale
+                    Sol sol = new Sol(idSol, new ArrayList<>(ListeCoinTEMP),idRevetement); // copie de la liste ListeCoinTEMP pour éviterde modifier la liste originale
                     areaSol = sol.surface();
                     ListeSol.add(sol);
                     
                     // création d'un nouveau Plafond
-                    Plafond plafond = new Plafond(idPlafond, new ArrayList<>(ListeCoinTEMP), new ArrayList<>(ListeMurTEMP), idRevetement);
+                    Plafond plafond = new Plafond(idPlafond, new ArrayList<>(ListeCoinTEMP), idRevetement);
                     // copie de la liste ListeCoinTEMP pour éviter de modifier la liste originale
                     areaPlafond = plafond.surface();
                     ListePlafond.add(plafond);
@@ -328,7 +400,7 @@ public class App extends Application {
                     if (ListeCoin.size() > 1) {
                         Coin debut = ListeCoin.get(idCoin-2);
                         Coin fin = ListeCoin.get(idCoin-1);
-                        Mur mur = new Mur(idMur, debut, fin, idRevetement);
+                        Mur mur = new Mur(idMur, debut, fin, nbrporte, nbrfenetre, idRevetement);
                         ListeMur.add(mur);
                         ListeMurTEMP.add(mur);
                         Line ligne = new Line(debut.getX(), debut.getY(), fin.getX(), fin.getY());
@@ -383,7 +455,7 @@ public class App extends Application {
                             hmax=height;
                         }
                         // Calcul de l'aire du mur
-                        this.area = ListeMur.get(idMur-2).surface(height, nbrporte, nbrfenetre);
+                        this.area = ListeMur.get(idMur-2).surface(height);
                         // Affichage de l'aire du mur
                         Label areaLabel = new Label("Aire du mur: " + Math.ceil(area/900*100)/100 + " mètres carrés");
                         areaLabel.setStyle("-fx-text-fill: green;");
