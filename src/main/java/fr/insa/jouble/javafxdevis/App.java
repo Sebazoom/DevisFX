@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -253,6 +254,7 @@ public class App extends Application {
             
             prixsurface.add(prix * area/900);
             idRevetement = prixTexte;
+            ListeMur.get(idMur-1).idRevetement = prixTexte;
             primaryStage.setScene(thirdScene);
         });
         
@@ -267,7 +269,6 @@ public class App extends Application {
             }
             prixsurface.add(prix * area/900);
             idRevetement = prixTexte;
-            ListeMur.get(idMur-2).idRevetement=prixTexte;
             primaryStage.setScene(thirdScene);
         });
 
@@ -323,8 +324,6 @@ public class App extends Application {
         
         drawingPane.setOnMouseClicked(event -> {
             compt++; 
-            System.out.println(idCoin);
-            System.out.println(idMur);
             if(compt==0 || compt==1) {
                 drawingPane.setDisable(false);
             } else {drawingPane.setDisable(true);}
@@ -377,7 +376,6 @@ public class App extends Application {
             
             if (idPiece > 1 && firstpoint==0 && !r) {
                 Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
-
                 drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
                 Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
                 ListeCoin.add(coin);
@@ -386,7 +384,6 @@ public class App extends Application {
             
             else if(!r){
                 Circle point = new Circle(x, y, 5, Color.BLACK); // Création du cercle représentant le point
-
                 drawingPane.getChildren().add(point); // Ajout du cercle au conteneur
                 Coin coin = new Coin(idCoin,x, y); // Création d'un objet Coin représentant le point
                 ListeCoin.add(coin);
