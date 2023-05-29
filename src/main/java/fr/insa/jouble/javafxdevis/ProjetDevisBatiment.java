@@ -19,113 +19,15 @@ public class ProjetDevisBatiment {
     static String workingDir = System.getProperty("user.dir");
     // Définir le chemin d'accès relatif du répertoire de sauvegarde
     static String saveDirectory = workingDir + File.separator + "src\\main\\java\\fr\\insa\\jouble\\javafxdevis\\CatalogueRevetement.txt";
-    static int idCoin = 1;
-    static int idMur = 1;
-    static int idPiece = 1;
-    static int idSol = 1;
-    static int idPlafond = 1;
-    static int idEtage = 1;
+    private static Map<Integer, Double> revetementsCache = new HashMap<>(); // Déclaration d'un Map pour stocker les revêtements lus depuis le fichier
+
     
     public static void main(String[] args) throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         
-        FileWriter fileWriter = new FileWriter("DevisBatiment.txt");
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-  
-        
-        // On crée une liste pour stocker tous les coins
-        ArrayList<Coin> ListeCoin = new ArrayList<>();
-        ArrayList<Mur> ListeMur = new ArrayList<>();
-       
-        double[] prixpieces = new double[250];
-        double[] prixmurs = new double[250];
-        int nbrpieces,comptpieces, nbrappart, comptappart, nbrniv, comptniv;
-        int i = 0; 
-        double prixtotalpiece = 0, prixtotalappart = 0, prixtotalniv = 0, prixtotal = 0;
-        
-        
-        // ON DEMANDE LE NBR DE NIVEAUX
-        do {
-            System.out.println("Combien y a-t-il de niveaux ?");
-            nbrniv = Lire.i();
-            } while (nbrniv<1);
-        // POUR CHAQUE NIVEAU
-        for(comptniv=1;comptniv<=nbrniv;comptniv++) {
-            // ON DEMANDE LE NBR D'APPARTS
-            do {
-                System.out.println("Combien y a-t-il d'appartements ?");
-                nbrappart = Lire.i();
-                } while (nbrappart<1);
-            // POUR CHAQUE APPARTEMENT 
-            for(comptappart = 1;comptappart<=nbrappart; comptappart++){
-                // ON DEMANDE LE NBR DE PIECES
-                do {
-                System.out.println("Combien y a-t-il de pièces dans l'appartement n°"+comptappart);
-                nbrpieces = Lire.i();
-                } while (nbrpieces<1);
-                // POUR CHAQUE PIECE
-                for(comptpieces=1;comptpieces<=nbrpieces;comptpieces++) {
-
-                    // Boucle qui crée les coins et les ajoute à la liste
-                    for (int j=1; j<=4; j++){
-                        Coin c = DemandeCoin(idCoin);
-                        ListeCoin.add(c);  
-                    } 
-                    // Boucle qui écrit les coins dans le fichier txt
-                    for (Coin c : ListeCoin) {
-                        bufferedWriter.write(c.idCoin + ";" + c.cx + ";" + c.cy + ";");
-                        bufferedWriter.newLine(); // Écrit une nouvelle ligne dans le fichier
-                    }
-                    // On vide le tampon et on écrit définitivement sur le fichier txt
-
-                    bufferedWriter.newLine();
-
-                    // ON CREE LES MURS DE LA PIECE
-                    /*
-                    for (int j=1; j<=4; j++) {
-                        Mur m = DemandeMur(idMur, ListeCoin);
-                        double surface = m.surface();
-                        RevetementDispo(1,0,0);
-                        System.out.println("Quel revêtement voulez-vous ?");
-                        int idRevetement = Lire.i();
-                        double prix = LectureRevetement(idRevetement);
-                        prixmurs[i] = surface*prix;
-                        ListeMur.add(m);
-                        i++;
-                    }
-                    */
-                    // ON CALCULE LE PRIX TOTAL DE LA PIECE
-                    for (int j=0; j<=3; j++) {
-                        prixtotalpiece = prixtotalpiece+prixmurs[j];
-                    }
-
-                    // ON INSCRIT LES MURS DANS LE FICHIER TXT
-                    for (Mur m : ListeMur) {
-                        bufferedWriter.write(m.idMur + ";" + m.debut.idCoin + ";" + m.fin.idCoin + ";");
-                        bufferedWriter.newLine(); // Écrit une nouvelle ligne dans le fichier
-                    }
-                    // ON ENREGISTRE LE PRIX DE LA PIECE N°I EN I-EME POSITION DU TABLEAU POUR CALCULER LE PRIX DE L'APPARTEMENT
-                    prixpieces[comptpieces-1] = prixtotalpiece;
-                    
-
-
-                    // Boucle qui écrit les murs dans le fichier txt
-
-                    
-                    bufferedWriter.newLine();
-
-                }
-            }  
-        }
-        
-        // ON VIDE LE TAMPON ET ON ECRIT DEFINITIVEMENT SUR LE FICHIER TXT
-        bufferedWriter.flush();
-        bufferedWriter.close();
-      
     }
    
    
     
-    private static Map<Integer, Double> revetementsCache = new HashMap<>(); // Déclaration d'un Map pour stocker les revêtements lus depuis le fichier
 
     public static Double LectureRevetement(int recherche) {
         if (revetementsCache.containsKey(recherche)) {
@@ -158,21 +60,30 @@ public class ProjetDevisBatiment {
         revetementsCache.put(recherche, prixunitaire); // On ajoute le revêtement au cache
         return prixunitaire;
     }
-  
-    public static Coin DemandeCoin(int id) {
-        Coin c;
-        double x,y;
-        
-        System.out.println("L'identifiant du coin que vous créez est : "+idCoin);
-        System.out.println("Abscisse du Coin");
-        x=Lire.d();
-        System.out.println("Ordonnée du Coin");
-        y=Lire.d();
-        
-        c = new Coin(id,x,y);
-        idCoin++;
-        return c;
+    
+     public static Double LectureRevetementSauvegarde(int recherche, String fileName) {        
+        Double prixunitaire = null;
+        try {
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String ligne = bufferedReader.readLine();
+                    while (ligne != null) {
+                        String[] morceaux = ligne.split(";");
+                        if(morceaux[0].equals(Integer.toString(recherche))) {
+                            prixunitaire = Double.parseDouble(morceaux[5]);
+                        }
+                        ligne = bufferedReader.readLine();
+                    }
+        }
+        catch(FileNotFoundException err){
+            System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+            System.out.println(" Erreur :\n "+err);}             
+            
+        return prixunitaire;
     }
+  
+    
     
     public static int NbrMur(String FileName) {
         int nombre = 0;
@@ -297,7 +208,7 @@ public class ProjetDevisBatiment {
                            
 
 
-                            if ((morceaux[0].equals("Coin"))&&(morceaux[1].equals(idCoin))) {
+                            if ((morceaux[0].equals("Coin"))&&(morceaux[1].equals(Integer.toString(idCoin)))) {
                                 Coin c=new Coin(idCoin,Double.parseDouble(morceaux[2]),Double.parseDouble(morceaux[3]));
                                 return c;
                             }
@@ -332,7 +243,7 @@ public class ProjetDevisBatiment {
 
                 boolean verif = false;
                 for (int i=3; i <= morceaux.length-1; i++) {
-                    if(morceaux[i].equals(idMur)) {
+                    if(morceaux[i].equals(Integer.toString(idMur))) {
                         verif = true;
                     }
                 }
@@ -360,7 +271,7 @@ public class ProjetDevisBatiment {
 
                 boolean verif = false;
                 for (int i=2; i <= morceaux.length-1; i++) {
-                    if(morceaux[i].equals(idPiece)) {
+                    if(morceaux[i].equals(Integer.toString(idPiece))) {
                         verif = true;
                     }
                 }
@@ -388,7 +299,7 @@ public class ProjetDevisBatiment {
 
                 boolean verif = false;
                 for (int i=2; i <= morceaux.length-1; i++) {
-                    if(morceaux[i].equals(idAppart)) {
+                    if(morceaux[i].equals(Integer.toString(idAppart))) {
                         verif = true;
                     }
                 }
@@ -413,8 +324,9 @@ public class ProjetDevisBatiment {
             while(ligne != null) {
                 String[] morceaux = ligne.split(";");
                 ligne = ReaderPiece.readLine();
-                if (morceaux[0].equals("Niveau") && morceaux[1].equals(idNiveau)) {
+                if (morceaux[0].equals("Niveau") && morceaux[1].equals(Integer.toString(idNiveau))) {
                     hsp = Double.parseDouble(morceaux[2]);
+                    System.out.println("Hauteur " +hsp);
                 }
             }
         } 
@@ -428,21 +340,26 @@ public class ProjetDevisBatiment {
         try {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(FileName));
                 String ligne = bufferedReader.readLine();
-
+                
                 while (ligne != null) {
+                    
                     String[] morceaux = ligne.split(";");
-                    ligne = bufferedReader.readLine();
-                    if(morceaux[0].equals("Mur") && morceaux[1].equals(idMur)) {
-                        Coin debut = CreaCoin(Integer.parseInt(morceaux[1]), FileName);
-                        Coin fin = CreaCoin(Integer.parseInt(morceaux[2]), FileName);
+                    
+                    if(morceaux[0].equals("Mur") && morceaux[1].equals(Integer.toString(idMur))) {
+                        Coin debut = CreaCoin(Integer.parseInt(morceaux[2]), FileName);
+                        Coin fin = CreaCoin(Integer.parseInt(morceaux[3]), FileName);
                         Mur mur = new Mur(idMur, debut, fin, Integer.parseInt(morceaux[3]), Integer.parseInt(morceaux[4]), Integer.parseInt(morceaux[5]));
+                        System.out.println("longEuR : " +Distance(debut, fin));
                         idRevetement = Integer.parseInt(morceaux[5]);
                         surface = mur.surface(hsp);
-                        System.out.println(surface);
+                        System.out.println("Surface : " +surface);
                     }
+                    ligne = bufferedReader.readLine();
                 }
-                montant = surface*LectureRevetement(idRevetement);
-                System.out.println(montant);
+                
+                montant = surface*LectureRevetementSauvegarde(idRevetement, FileName);
+                System.out.println("Montant: " + montant);
+                
                 return montant;
         }
 

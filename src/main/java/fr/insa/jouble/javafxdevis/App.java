@@ -194,19 +194,15 @@ public class App extends Application {
         Stage stage = new Stage();
         stage.setTitle("FileChooser");
         File selectedFile = fileChooser.showOpenDialog(stage);
-        primaryStage.setScene(finScene2());
+        
         // Vérifier si un fichier a été sélectionné
         if (selectedFile != null) {
             // Faire quelque chose avec le fichier sélectionné, par exemple l'afficher dans une zone de texte
-                       
-        System.out.println("niveau " + ProjetDevisBatiment.Fonctiontest(1, selectedFile.getAbsolutePath()));
         
         int nombreMurs = ProjetDevisBatiment.NbrMur(selectedFile.getAbsolutePath());
         int nombreSols = ProjetDevisBatiment.NbrSol(selectedFile.getAbsolutePath());
         int nombrePlafonds = ProjetDevisBatiment.NbrPlafond(selectedFile.getAbsolutePath());
-        System.out.println(nombreMurs);
-        System.out.println(nombreSols);
-        System.out.println(nombrePlafonds);
+
         for(int i=1; i<=nombreMurs; i++) {
             prixMurs = prixMurs + ProjetDevisBatiment.MontantMurs(i, selectedFile.getAbsolutePath());
             System.out.println("prixMurs " + prixMurs);
@@ -220,6 +216,7 @@ public class App extends Application {
             System.out.println("prixPlafonds " +prixPlafonds);
         }
         }
+        primaryStage.setScene(finScene2());
         });
         mainRoot.getChildren().addAll(buttonDessiner, buttonDevis);
         
