@@ -103,7 +103,7 @@ public class App extends Application {
         primaryStage.setTitle("Projet Devis Batiment");
         primaryStage.show();
     }
-
+    // C'est la fenetre d'acceuil
     private void createWelcomeScene() {
         Label welcomeLabel = new Label("Bienvenue dans notre simulateur.");
         welcomeLabel.setStyle("-fx-font-size: 25px;");
@@ -120,7 +120,7 @@ public class App extends Application {
 
         welcomeScene = new Scene(welcomeRoot, 640, 480);
     }
-    
+    // C'est la scène qui affiche le devis pour le batîment dessiné
     private Scene finScene() {
         double prix = 0;
         
@@ -148,7 +148,7 @@ public class App extends Application {
 
         return scene;
     }
-    
+    // C'est la scène qui affiche le devis pour une sauvegarde
     private Scene finScene2() {       
         
         double prixDevis = prixMurs + prixPlafonds + prixSols; 
@@ -173,7 +173,7 @@ public class App extends Application {
         return scene;
     }
     
-
+    // C'est la page d'acceuil où on demande si l'utilisateur veut dessiner ou obtenir le devis d'une sauvegarde
     private void createMainScene() {
         Button buttonDessiner = new Button("Dessiner");
         buttonDessiner.setOnAction(event -> primaryStage.setScene(thirdScene));
@@ -223,7 +223,7 @@ public class App extends Application {
         mainScene = new Scene(mainRoot, 640, 480);
         
     }
-
+    // C'est dans cette scène qu'on choisit le revetement pour une surface
     private Scene createSceneRevetement(boolean mur, boolean sol, boolean plafond, double area) {
       
         ArrayList<String> listeRevetement = ProjetDevisBatiment.RevetementDispo(mur, sol, plafond);
@@ -285,7 +285,7 @@ public class App extends Application {
         return scene;
     }
     
-    
+    // C'est dans cette scène qu'on dessine le batîment
     public void createThirdScene() throws IOException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Pane drawingPane = new Pane(); // Conteneur pour dessiner les points et les lignes
         drawingPane.setPrefSize(640, 480);
@@ -464,11 +464,9 @@ public class App extends Application {
                 });
                 
                 
-                // Ajout des labels au conteneur
             }    
         idCoin++;  
         firstpoint++;  
-            //previousPoint[0] = point; // Met à jour le point précédent
         });
         
         
@@ -587,16 +585,7 @@ public class App extends Application {
         
         });
         
-                /*      Future sauvegarde à l'arrache
-        // Affichage des pièces sur le conteneur
-        for (Piece piece : pieces) {
-            for (Coin coin : piece.getCoins()) {
-                Circle circle = new Circle(coin.getX(), coin.getY(), 5, Color.BLACK);
-                pane.getChildren().add(circle);
-            }
-        }
-        
-        */
+               
 
         HBox rootContainer = new HBox(10);
         rootContainer.getChildren().addAll(drawingPane, infoContainer);

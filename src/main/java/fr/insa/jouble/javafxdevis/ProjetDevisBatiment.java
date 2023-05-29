@@ -27,7 +27,7 @@ public class ProjetDevisBatiment {
     }
    
    
-    
+    // On sort le prix par mètre carré pour un revêtement grâce à cette méthode qui a besoin seulement de l'ID pour la partie où on créé soi-même le code
 
     public static Double LectureRevetement(int recherche) {
         if (revetementsCache.containsKey(recherche)) {
@@ -61,6 +61,8 @@ public class ProjetDevisBatiment {
         return prixunitaire;
     }
     
+    // On sort le prix par mètre carré pour un revêtement grâce à cette méthode qui a besoin seulement de l'ID et de la sauvegarde pour la partie où on fait le devis d'une sauvegarde
+    
      public static Double LectureRevetementSauvegarde(int recherche, String fileName) {        
         Double prixunitaire = null;
         try {
@@ -84,7 +86,7 @@ public class ProjetDevisBatiment {
     }
   
     
-    
+    // on compte le nombre de murs dans la sauvegarde
     public static int NbrMur(String FileName) {
         int nombre = 0;
         try {
@@ -104,7 +106,7 @@ public class ProjetDevisBatiment {
                     System.out.println(" Erreur :\n "+err);}             
         return nombre;    
     } 
-    
+     // on compte le nombre de sols dans la sauvegarde
     public static int NbrSol(String FileName) {
         int nombre = 0;
         try {
@@ -124,7 +126,7 @@ public class ProjetDevisBatiment {
                     System.out.println(" Erreur :\n "+err);}             
         return nombre;    
     }
-    
+     // on compte le nombre de plafonds dans la sauvegarde
     public static int NbrPlafond(String FileName) {
         int nombre = 0;
         try {
@@ -528,51 +530,6 @@ public class ProjetDevisBatiment {
         return idNiveau;
     }
         
-         
-            /*try
-                {
-                BufferedWriter Devisbat=new BufferedWriter(new FileWriter("Devisbat.txt",false));
-                 Devisbat.write("Coins :");
-                 Devisbat.newLine();
-                for (int t=0;t<A.size(); t++){
-                      Devisbat.write(A.get(t).idCoin+";"+A.get(t).cx+";"+A.get(t).cy);
-                      Devisbat.newLine();
-                  }
-                Devisbat.write("Murs :");
-                 Devisbat.newLine();
-                for (int t=0;t<listeMurtot.size(); t++){
-                      Devisbat.write(listeMurtot.get(t).idMur+";"+listeMurtot.get(t).d.idCoin+";"+listeMurtot.get(t).f.idCoin+";"+listeMurtot.get(t).nbrfenetres+";"+listeMurtot.get(t).nbrportes);
-                      Devisbat.newLine();
-                  }
-                Devisbat.write("Sols :");
-                 Devisbat.newLine();
-                int b=0;
-                  for (int t=0;t<listesol.size(); t++){
-                      
-                      Devisbat.write(listesol.get(t).idSol+";"+listeMurtot.get(b).idMur+";"+listeMurtot.get(b+1).idMur+";"+listeMurtot.get(b+2).idMur+";"+listeMurtot.get(b+3).idMur);
-                      Devisbat.newLine();
-                      b=b+4;
-                  }
-                  Devisbat.write("Plafonds :");
-                 Devisbat.newLine();
-                  b=0;
-                  for (int t=0;t<listepla.size(); t++){
-                      Devisbat.write(listepla.get(t).idPlafond+";"+listeMurtot.get(b).idMur+";"+listeMurtot.get(b+1).idMur+";"+listeMurtot.get(b+2).idMur+";"+listeMurtot.get(b+3).idMur);
-                      Devisbat.newLine();
-                      b=b+4;
-                  }
-                  
-                
-                    Devisbat.close();
-                }
-                catch (IOException err)
-                {System.out.println("Erreur :\n"+err);}*/
-
-        
-    
-    
-    
-    
 
 
 }
