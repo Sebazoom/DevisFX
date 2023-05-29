@@ -174,6 +174,65 @@ public class ProjetDevisBatiment {
         return c;
     }
     
+    public static int NbrMur(String FileName) {
+        int nombre = 0;
+        try {
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(FileName));
+                    String ligne = bufferedReader.readLine();
+                    while (ligne != null) {
+                           String[] morceaux = ligne.split(";");
+                           ligne = bufferedReader.readLine();
+                            if (morceaux[0].equals("Mur")) {
+                                nombre = nombre + 1;
+                            }
+                    }
+            } 
+                catch(FileNotFoundException err){
+                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+                catch (IOException err){
+                    System.out.println(" Erreur :\n "+err);}             
+        return nombre;    
+    } 
+    
+    public static int NbrSol(String FileName) {
+        int nombre = 0;
+        try {
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(FileName));
+                    String ligne = bufferedReader.readLine();
+                    while (ligne != null) {
+                           String[] morceaux = ligne.split(";");
+                           ligne = bufferedReader.readLine();
+                            if (morceaux[0].equals("Sol")) {
+                                nombre = nombre + 1;
+                            }
+                    }
+            } 
+                catch(FileNotFoundException err){
+                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+                catch (IOException err){
+                    System.out.println(" Erreur :\n "+err);}             
+        return nombre;    
+    }
+    
+    public static int NbrPlafond(String FileName) {
+        int nombre = 0;
+        try {
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(FileName));
+                    String ligne = bufferedReader.readLine();
+                    while (ligne != null) {
+                           String[] morceaux = ligne.split(";");
+                           ligne = bufferedReader.readLine();
+                            if (morceaux[0].equals("Plafond")) {
+                                nombre = nombre + 1;
+                            }
+                    }
+            } 
+                catch(FileNotFoundException err){
+                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+                catch (IOException err){
+                    System.out.println(" Erreur :\n "+err);}             
+        return nombre;    
+    }
     
     
     public static double Distance(Coin c1, Coin c2) {
@@ -224,240 +283,335 @@ public class ProjetDevisBatiment {
         }
     }
     
-    /*
-    public static double MontantNiveau (int id){ 
-                    double montant=0;
-                    
-            try
-                 {
-                     
-                    BufferedReader devis = new BufferedReader(new FileReader("Devisbat.txt"));
-                    String ligne = devis.readLine();
-                   
+    
+    
+     
+    public static Coin CreaCoin (int idCoin, String fileName){
+        try {
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+                    String ligne = bufferedReader.readLine();
+
                     while (ligne != null) {
+
+                           String[] morceaux = ligne.split(";");
                            
-                           String[] listn = ligne.split(";");
-                           ligne = devis.readLine();
-                            if ((listn[0].equals("Niveau"))&&(listn[1].equals(String.valueOf(id)))) {
-                                
-                                
-                                 
-                                 for (int q=3;q<listn.length;q++){
-                                 montant = montant + MontantAppart(Integer.parseInt(listn[q]));
-                                     }
-                                 
-                              return montant;   
+
+
+                            if ((morceaux[0].equals("Coin"))&&(morceaux[1].equals(idCoin))) {
+                                Coin c=new Coin(idCoin,Double.parseDouble(morceaux[2]),Double.parseDouble(morceaux[3]));
+                                return c;
                             }
-                            
+                            ligne = bufferedReader.readLine();
+
                     }
-            
-                } 
-       
+
+            } 
+
                 catch(FileNotFoundException err){
                     System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
                 catch (IOException err){
                     System.out.println(" Erreur :\n "+err);} 
-            return 0;
-         }
-     public static double MontantAppart (int id){ 
-                    double montant=0;
-                    
-            try
-                 {
-                     
-                    BufferedReader devis = new BufferedReader(new FileReader("Devisbat.txt"));
-                    String ligne = devis.readLine();
-                   
-                    while (ligne != null) {
-                           
-                           String[] listap = ligne.split(";");
-                           ligne = devis.readLine();
-                            if ((listap[0].equals("Appartement"))&&(listap[1].equals(String.valueOf(id)))) {
-                                
-                                
-                                 
-                                 for (int q=3;q<listap.length;q++){
-                                 montant = montant + MontantPiece(Integer.parseInt(listap[q]));
-                                     }
-                                 
-                              return montant;   
-                            }
-                            
+                Coin C = new Coin(0,0,0);
+                System.out.println("Coin" + C.toString());
+                return C;
+    }
+
+    public static double MontantMurs (int idMur, String FileName) {
+
+        double montant;
+        double hsp = 0, surface = 0;
+        int idPiece = 0, idAppart = 0, idNiveau = 0, idRevetement = 1;
+
+        // On trouve dans quelle piece est située le mur 
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+
+                boolean verif = false;
+                for (int i=3; i <= morceaux.length-1; i++) {
+                    if(morceaux[i].equals(idMur)) {
+                        verif = true;
                     }
-            
-                } 
-       
-                catch(FileNotFoundException err){
-                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
-                catch (IOException err){
-                    System.out.println(" Erreur :\n "+err);} 
-            return 0;
-         }      
-    public static double MontantPiece (int id){ 
-                    double montant=0;
-                    
-            try
-                 {
-                     
-                    BufferedReader devis = new BufferedReader(new FileReader("Devisbat.txt"));
-                    String ligne = devis.readLine();
-                   
-                    while (ligne != null) {
-                           
-                           String[] listpi = ligne.split(";");
-                           ligne = devis.readLine();
-                            if ((listpi[0].equals("Piece"))&&(listpi[1].equals(String.valueOf(id)))) {
-                                
-                                montant=MontantSOL(Integer.parseInt(listpi[2]))+MontantPLAFOND(Integer.parseInt(listpi[3]));
-                                 
-                                 for (int q=4;q<listpi.length;q++){
-                                 montant = montant + MontantMurs(Integer.parseInt(listpi[q]));
-                                     }
-                                 
-                              return montant;   
-                            }
-                            
+                }
+
+                if (morceaux[0].equals("Piece") && verif == true) {
+                    idPiece = Integer.parseInt(morceaux[1]);
+                }
+
+                ligne = ReaderPiece.readLine();
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+
+
+        // On trouve dans quel appartement est située la pièce
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+
+                boolean verif = false;
+                for (int i=2; i <= morceaux.length-1; i++) {
+                    if(morceaux[i].equals(idPiece)) {
+                        verif = true;
                     }
-            
-                } 
-       
-                catch(FileNotFoundException err){
-                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
-                catch (IOException err){
-                    System.out.println(" Erreur :\n "+err);} 
-            return 0;
-         }        
-            
-    public static double MontantMurs (int id){ 
-                    ArrayList listeRevetement;
-                    listeRevetement = new ArrayList<>();
-                    double montant=0;
-            try
-                 {
-                     
-                    BufferedReader revetement = new BufferedReader(new FileReader("Devisbat.txt"));
-                    String ligne = revetement.readLine();
-                   
-                    while (ligne != null) {
-                           
-                           String[] listm = ligne.split(";");
-                           ligne = revetement.readLine();
-                            if ((listm[0].equals("Mur"))&&(listm[1].equals(String.valueOf(id)))) {
-                                for (int h=6;h<listm.length;h++){
-                                    listeRevetement.add(listm[h]);
-                                //Mur m= new Mur(listRev[1],listRev[0],listRev[0],listRev[0],listRev[0],listRev[0]);
-                                }
-                                 Mur m=new Mur(Integer.parseInt(listm[1]),Coins(Integer.parseInt(listm[2])),Coins(Integer.parseInt(listm[3])),Integer.parseInt(listm[4]),Integer.parseInt(listm[5]),listeRevetement);
-                                
-                                 for (int q=6;q<listm.length;q++){
-                                 montant=montant+m.montant(Lecture2(Integer.parseInt(listm[q])));
-                                //System.out.println("aaa"+Lecture2(Integer.parseInt(listm[q])));
-                                     }
-                                
-                                 
-                              return montant;   
-                            }
-                            
+                }
+
+                if (morceaux[0].equals("Appartement") && verif == true) {
+                    idAppart = Integer.parseInt(morceaux[1]);
+                }
+
+                ligne = ReaderPiece.readLine();
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+
+
+        // On trouve dans quel niveau est situé l'appartement
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+
+                boolean verif = false;
+                for (int i=2; i <= morceaux.length-1; i++) {
+                    if(morceaux[i].equals(idAppart)) {
+                        verif = true;
                     }
-            
-                } 
-       
-                catch(FileNotFoundException err){
-                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
-                catch (IOException err){
-                    System.out.println(" Erreur :\n "+err);} 
-            return 0;
-         }
-          public static double MontantSOL (int id){ 
-                    ArrayList listeRevetement;
-                    listeRevetement = new ArrayList<>();
-                     ArrayList <Coin> listeCoinbis;
-                     listeCoinbis = new ArrayList<>();
-                     double montant=0;
-            try
-                 {
-                     
-                    BufferedReader sols = new BufferedReader(new FileReader("Devisbat.txt"));
-                    String ligne = sols.readLine();
-                   
-                    while (ligne != null) {
-                           
-                           String[] lists = ligne.split(";");
-                           ligne = sols.readLine();
-                            if ((lists[0].equals("Sol"))&&(lists[1].equals(String.valueOf(id)))) {
-                                for (int h=6;h<lists.length;h++){
-                                    listeRevetement.add(lists[h]);
-                                }
-                                for (int h=2;h<6;h++){
-                                 listeCoinbis.add(Coins(Integer.parseInt(lists[h])));
-                                 
-                                }
-                                
-                                 Sol s=new Sol(Integer.parseInt(lists[1]),listeCoinbis,listeRevetement);
-                                 
-                                 for (int q=6;q<lists.length;q++){
-                                 montant=montant+s.montant(Lecture2(Integer.parseInt(lists[q])));
-                                     }
-                                 
-                                 
-                                 
-                              return montant;   
-                            }
-                            
+                }
+
+                if (morceaux[0].equals("Niveau") && verif == true) {
+                    idNiveau = Integer.parseInt(morceaux[1]);
+                }
+
+                ligne = ReaderPiece.readLine();
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+
+
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+                ligne = ReaderPiece.readLine();
+                if (morceaux[0].equals("Niveau") && morceaux[1].equals(idNiveau)) {
+                    hsp = Double.parseDouble(morceaux[2]);
+                }
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+
+
+
+        try {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(FileName));
+                String ligne = bufferedReader.readLine();
+
+                while (ligne != null) {
+                    String[] morceaux = ligne.split(";");
+                    ligne = bufferedReader.readLine();
+                    if(morceaux[0].equals("Mur") && morceaux[1].equals(idMur)) {
+                        Coin debut = CreaCoin(Integer.parseInt(morceaux[1]), FileName);
+                        Coin fin = CreaCoin(Integer.parseInt(morceaux[2]), FileName);
+                        Mur mur = new Mur(idMur, debut, fin, Integer.parseInt(morceaux[3]), Integer.parseInt(morceaux[4]), Integer.parseInt(morceaux[5]));
+                        idRevetement = Integer.parseInt(morceaux[5]);
+                        surface = mur.surface(hsp);
+                        System.out.println(surface);
                     }
-            
-                } 
-       
-                catch(FileNotFoundException err){
-                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
-                catch (IOException err){
-                    System.out.println(" Erreur :\n "+err);} 
-            return 0;
-         }
-           public static double MontantPLAFOND (int id){ 
-                    ArrayList listeRevetement;
-                    listeRevetement = new ArrayList<>();
-                     ArrayList <Coin> listeCointer;
-                     listeCointer = new ArrayList<>();
-                     double montant=0;
-            try
-                 {
-                     
-                    BufferedReader Pla = new BufferedReader(new FileReader("Devisbat.txt"));
-                    String ligne = Pla.readLine();
-                   
-                    while (ligne != null) {
-                           
-                           String[] listp = ligne.split(";");
-                           ligne = Pla.readLine();
-                            if ((listp[0].equals("Plafond"))&&(listp[1].equals(String.valueOf(id)))) {
-                                for (int h=7;h<listp.length;h++){
-                                    listeRevetement.add(listp[h]);
-                                
-                                }
-                                 for (int h=2;h<6;h++){
-                                 listeCointer.add(Coins(Integer.parseInt(listp[h])));
-                                }
-                                
-                                 Plafond p=new Plafond(Integer.parseInt(listp[1]),listeCointer,Integer.parseInt(listp[6]),listeRevetement);
-                                 
-                                 for (int q=7;q<listp.length;q++){
-                                 montant=montant+p.montant(Lecture2(Integer.parseInt(listp[q])));
-                                     }
-                                 
-                              return montant;   
-                            }
-                            
+                }
+                montant = surface*LectureRevetement(idRevetement);
+                System.out.println(montant);
+                return montant;
+        }
+
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);} 
+        return 0;                    
+    }
+
+
+    public static double MontantSol (int idSol, String FileName) {
+        double montant = 0;
+        double surface = 0;
+        int idRevetement = 1;
+        ArrayList <Coin> listeCoin = new ArrayList<>();
+
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+                ligne = ReaderPiece.readLine();
+                if (morceaux[0].equals("Sol") && morceaux[1].equals(idSol)) {
+                    idRevetement = Integer.parseInt(morceaux[morceaux.length-1]);
+                    for(int i=0; i<=morceaux.length-2; i++){
+                        listeCoin.add(CreaCoin(i,FileName));
                     }
-            
-                } 
-       
-                catch(FileNotFoundException err){
-                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
-                catch (IOException err){
-                    System.out.println(" Erreur :\n "+err);} 
-            return 0;
-         }
+                    Sol sol = new Sol(idSol, listeCoin, idRevetement);
+                    surface = sol.surface();
+                }
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+
+        montant = surface * LectureRevetement(idRevetement);
+
+        return montant;
+    }
+
+    public static double MontantPlafond (int idPlafond, String FileName) {
+        double montant = 0;
+        double surface = 0;
+        int idRevetement = 1;
+        ArrayList <Coin> listeCoin = new ArrayList<>();
+
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+                ligne = ReaderPiece.readLine();
+                if (morceaux[0].equals("Sol") && morceaux[1].equals(idPlafond)) {
+                    idRevetement = Integer.parseInt(morceaux[morceaux.length-1]);
+                    for(int i=0; i<=morceaux.length-2; i++){
+                        listeCoin.add(CreaCoin(i,FileName));
+                    }
+                    Sol sol = new Sol(idPlafond, listeCoin, idRevetement);
+                    surface = sol.surface();
+                }
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+
+        montant = surface * LectureRevetement(idRevetement);
+
+        return montant;
+    }
+    
+    public static int Fonctiontest(int id, String FileName) {
+        double montant;
+        double hsp = 0, surface = 0;
+
+        int idPiece = 0;
+        int idAppart = 0;
+        int idNiveau = 0;
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+
+                boolean verif = false;
+                for (int i=3; i <= morceaux.length-1; i++) {
+                    if(morceaux[i].equals(id)) {
+                        verif = true;
+                    }
+                }
+
+                if (morceaux[0].equals("Piece") && verif == true) {
+                    idPiece = Integer.parseInt(morceaux[1]);
+                }
+
+                ligne = ReaderPiece.readLine();
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+
+
+        // On trouve dans quel appartement est située la pièce
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+
+                boolean verif = false;
+                for (int i=2; i <= morceaux.length-1; i++) {
+                    if(morceaux[i].equals(idPiece)) {
+                        verif = true;
+                    }
+                }
+
+                if (morceaux[0].equals("Appartement") && verif == true) {
+                    idAppart = Integer.parseInt(morceaux[1]);
+                }
+
+                ligne = ReaderPiece.readLine();
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+
+
+        // On trouve dans quel niveau est situé l'appartement
+        try {
+            BufferedReader ReaderPiece = new BufferedReader(new FileReader(FileName));
+            String ligne = ReaderPiece.readLine();
+
+            while(ligne != null) {
+                String[] morceaux = ligne.split(";");
+
+                boolean verif = false;
+                for (int i=2; i <= morceaux.length-1; i++) {
+                    if(morceaux[i].equals(idAppart)) {
+                        verif = true;
+                    }
+                }
+
+                if (morceaux[0].equals("Niveau") && verif == true) {
+                    idNiveau = Integer.parseInt(morceaux[1]);
+                }
+
+                ligne = ReaderPiece.readLine();
+            }
+        } 
+        catch(FileNotFoundException err){
+        System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
+        catch (IOException err){
+        System.out.println(" Erreur :\n "+err);}
+        return idNiveau;
+    }
+        
+         
             /*try
                 {
                 BufferedWriter Devisbat=new BufferedWriter(new FileWriter("Devisbat.txt",false));
@@ -497,35 +651,7 @@ public class ProjetDevisBatiment {
                 catch (IOException err)
                 {System.out.println("Erreur :\n"+err);}*/
 
-    public static Coin Coins (int id){
         
-        try
-                 {
-                     
-                    BufferedReader Coins = new BufferedReader(new FileReader("Devisbat.txt"));
-                    String ligne = Coins.readLine();
-                   
-                    while (ligne != null) {
-                           
-                           String[] listC = ligne.split(";");
-                           ligne = Coins.readLine();
-                            if ((listC[0].equals("Coin"))&&(listC[1].equals(String.valueOf(id)))) {
-                                Coin c=new Coin(Integer.parseInt(listC[1]),Double.parseDouble(listC[2]),Double.parseDouble(listC[3]));
-                             return c;
-                            }
-                            
-                    }
-            
-                } 
-       
-                catch(FileNotFoundException err){
-                    System.out.println( "Erreur :le fichier n’existe pas!\n "+err);}
-                catch (IOException err){
-                    System.out.println(" Erreur :\n "+err);} 
-        Coin C = new Coin(0,0,0);
-        return C;
-    }
-    
     
     
     

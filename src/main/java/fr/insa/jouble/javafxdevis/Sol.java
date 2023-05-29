@@ -5,7 +5,7 @@
 package fr.insa.jouble.javafxdevis;
 
 import java.util.ArrayList;
-import javafx.scene.layout.Pane;
+
 
 /**
  *
@@ -14,14 +14,12 @@ import javafx.scene.layout.Pane;
 public class Sol {
     int idSol, idRevetement;
     ArrayList<Coin> listeCoin;
-    ArrayList<Mur> listeMur;
     // ArrayList<Revetements> listeRevetements;
     // private Pane drawingPane;
     
-    Sol(int idSol, ArrayList<Coin> listeCoin, ArrayList<Mur> listeMur, int idRevetement) {
+    Sol(int idSol, ArrayList<Coin> listeCoin, int idRevetement) {
         this.idSol = idSol;
         this.listeCoin = listeCoin;
-        this.listeMur = listeMur;
         this.idRevetement = idRevetement;
         /*double xhg=drawingPane.getWidth(), yhg=drawingPane.getHeight(), xhd=0, yhd=drawingPane.getWidth(), xbg=drawingPane.getWidth(), ybg=0, xbd=0, ybd=0;
         for (Coin test : listeCoin) {
@@ -88,19 +86,7 @@ public class Sol {
     double surface(){
         double distanceMax = 0;
         double distanceDeuxiemeMax = 0;
-        double murMax = 0;
-        double murDeuxiemeMax = 0;
-        
-        for (int k = 0; k < this.listeMur.size(); k++) {
-            double d = this.listeMur.get(k).longueur();
-            if (d > murMax) {
-                murDeuxiemeMax = murMax;
-                murMax = d;
-            } else if (d > murDeuxiemeMax) {
-                murDeuxiemeMax = d;
-            }
-        }
-        
+       
         for (int i = 0; i < this.listeCoin.size() - 1; i++) {
             for (int j = i + 1; j < this.listeCoin.size(); j++) {
                 double d = distance(this.listeCoin.get(i), this.listeCoin.get(j));
@@ -113,13 +99,11 @@ public class Sol {
             }
         }
 
-        if (this.listeCoin.size() == 3) {
+        if (listeCoin.size() == 3) {
             double base, hauteur;
             base = distance(listeCoin.get(1),listeCoin.get(2));
             hauteur = distancePointSegment(listeCoin);
             return base * hauteur * 0.5;
-        } else if (this.listeCoin.size() == 4) {
-            return murMax*murDeuxiemeMax;
         } else {
             return distanceMax*distanceMax; 
         }

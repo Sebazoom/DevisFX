@@ -14,15 +14,17 @@ public class Mur {
     final double surfacePorte = 1.89*900;
     final double surfaceFenetre = 1.44*900;
     int nbfenetres;
-     int nbportes;
+    int nbportes;
     
     
-    Mur(int id, Coin dc, Coin fc, int idRevetement)
+    Mur(int id, Coin dc, Coin fc, int nbportes, int nbfenetres, int idRevetement)
     {
         this.idMur=id;
         this.debut=dc;
         this.fin=fc;
         this.idRevetement = idRevetement;
+        this.nbportes = nbportes;
+        this.nbfenetres = nbfenetres;
     }
     
     void afficher()
@@ -36,10 +38,8 @@ public class Mur {
         return(Math.sqrt((this.fin.cx-this.debut.cx)*(this.fin.cx-this.debut.cx) + (this.fin.cy-this.debut.cy)*(this.fin.cy-this.debut.cy)));
     }
     
-    double surface(double hsp, int nbportes, int nbfenetres)
+    double surface(double hsp)
     {
-        this.nbfenetres = nbfenetres;
-        this.nbportes = nbportes;
         return(this.longueur()*hsp-surfaceFenetre*nbfenetres-surfacePorte*nbportes);
     }
     
